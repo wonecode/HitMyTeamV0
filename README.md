@@ -1,1 +1,1 @@
-# hitmyteam
+# HitMyTeam.gg
