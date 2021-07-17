@@ -15,8 +15,4 @@ import './styles/app.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-ReactDOM.render(
-    <Router>
-    </Router>,
-    document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));
