@@ -1,6 +1,7 @@
 .home {
   .left-home {
-    background-color: #fefefe;
+    background: no-repeat center/160% url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1132&q=80');
+    object-fit: cover;
     height: 93vh;
 
     @media screen and (max-width: 425px) {
@@ -38,7 +39,7 @@
         margin-bottom: 24px;
       }
 
-      button {
+      button, a {
         padding: 14px 22px;
       }
     }

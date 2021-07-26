@@ -1,0 +1,127 @@
+.login {
+  button {
+    padding: 14px 22px;
+  }
+
+  .left-login {
+    background: no-repeat left/140%
+      url('https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1050&q=80');
+    object-fit: contain;
+    height: 93vh;
+
+    @media screen and (max-width: 425px) {
+      display: none;
+      height: auto;
+    }
+  }
+
+  .right-login {
+    height: 93vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 156px;
+
+    h1 {
+      font-weight: 700;
+      font-size: 28px;
+    }
+
+    h2 {
+      font-size: 17px;
+      font-weight: lighter;
+      margin-top: 16px;
+    }
+
+    .buttons {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+
+      .twitter-button {
+        margin-bottom: 24px;
+      }
+    }
+
+    .middle-log {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+      .or {
+        margin: 32px 8px;
+      }
+
+      .bar {
+          width: 100%;
+          border: 1px solid #c0c0c0;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 24px;
+
+      .username {
+        margin-bottom: 24px;
+      }
+
+      .form-footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 16px;
+        margin-bottom: 40px;
+
+        .pass-forgot {
+          padding: 0;
+        }
+      }
+    }
+
+    @media screen and (max-width: 1024px) {
+      padding: 0 60px;
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      padding: 24px;
+      height: 100%;
+      justify-content: space-between;
+
+      h1 {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+    }
+
+    @media screen and (max-width: 320px) {
+      padding: 8px;
+    }
+  }
+
+  footer {
+    height: 7vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+    .title-footer {
+      font-size: 14px;
+      margin-right: 16px;
+    }
+  }
+}
