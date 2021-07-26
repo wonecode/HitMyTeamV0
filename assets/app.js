@@ -6,7 +6,7 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import './styles/app.scss';
+import '@fontsource/roboto';
 
 // start the Stimulus application
 // import './bootstrap';
@@ -15,4 +15,10 @@ import './styles/app.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+function App() {
+    return (
+        <h1>Hey</h1>
+    );
+}
+
+export default App;
