@@ -1,24 +1,46 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
-import '@fontsource/roboto';
-
-// start the Stimulus application
-// import './bootstrap';
-
-// init React
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {
+  createTheme,
+  ThemeProvider,
+} from '@material-ui/core';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
+import Home from './pages/Home';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#F7CA18',
+    },
+  },
+  typography: {
+    fontFamily: 'Quicksand',
+    fontWeightLight: 400,
+    fontWeightRegular: 500,
+    fontWeightMedium: 600,
+    fontWeightBold: 700,
+  },
+});
 
 function App() {
-    return (
-        <h1>Hey</h1>
-    );
+  return (
+    <ThemeProvider theme={theme}>
+      <Router>
+        <div className='App'>
+          <div className='content'>
+            <Switch>
+              <Route exact path='/'>
+                <Home />
+              </Route>
+            </Switch>
+          </div>
+        </div>
+      </Router>
+    </ThemeProvider>
+  );
 }
 
 export default App;
