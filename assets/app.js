@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import { Helmet } from 'react-helmet';
+import Register from './pages/Register';
 
 const theme = createTheme({
   palette: {
@@ -40,6 +40,9 @@ function App() {
               </Route>
               <Route path='/connexion'>
                 <Login />
+              </Route>
+              <Route path='/inscription'>
+                <Register />
               </Route>
             </Switch>
           </div>

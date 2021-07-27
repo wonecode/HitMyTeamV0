@@ -1,11 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+@import 'variables';
+
 @import 'home';
 @import 'login';
+@import 'register';
 
 body {
-  background-color: #202124;
-  color: #fefefe;
+  background-color: $dark;
+  color: $light;
   margin: 0;
+  font-family: 'Quicksand';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
