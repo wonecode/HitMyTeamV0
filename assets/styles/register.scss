@@ -1,6 +1,6 @@
 @import 'variables';
 
-.login {
+.register {
   .MuiGrid-container {
     align-items: center;
   }
@@ -9,14 +9,13 @@
     padding: 14px 22px;
   }
 
-  .left-login {
+  .left-register {
     height: 93vh;
 
     img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      object-position: left;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
     }
 
     @media screen and (max-width: 425px) {
@@ -25,7 +24,7 @@
     }
   }
 
-  .right-login {
+  .right-register {
     height: 93vh;
     display: flex;
     flex-direction: column;
@@ -73,26 +72,16 @@
       flex-direction: column;
       margin-bottom: 24px;
 
-      .username {
-        margin-bottom: 24px;
+      div {
+        margin-bottom: 10px;
       }
 
-      .form-footer {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 16px;
-        margin-bottom: 40px;
-
-        .pass-forgot {
-          color: $primary;
-          text-decoration: underline;
-        }
+      .password {
+          margin-bottom: 40px;
       }
     }
 
-    .not-registered {
+    .already-registered {
       color: $primary;
       text-align: center;
       text-decoration: none;

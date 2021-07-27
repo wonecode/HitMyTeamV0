@@ -57,6 +57,8 @@ export default function Home() {
               variant='contained'
               color='primary'
               className='register-button'
+              component={Link}
+              to='/inscription'
             >
               S'inscrire
             </Button>

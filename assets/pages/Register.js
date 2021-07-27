@@ -7,35 +7,24 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import IconButton from '@material-ui/core/IconButton';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import '../styles/login.scss';
-import { Helmet } from 'react-helmet';
-import imageCover from '../images/esport-1.jpg';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import imageCover from '../images/esport-3.jpg';
+import '../styles/register.scss';
 
 library.add(faDiscord);
 
-export default function Login() {
+export default function Register() {
   return (
-    <main className='login'>
+    <main className='register'>
       <Helmet>
-        <title>Connexion | HitMyTeam</title>
+        <title>Inscription | HitMyTeam</title>
       </Helmet>
       <Grid container>
         <Grid
           item
-          className='left-login'
-          xs={12}
-          sm={5}
-          lg={6}
-        >
-          <img src={imageCover} alt='img-esport' />
-        </Grid>
-        <Grid
-          item
-          className='right-login'
+          className='right-register'
           xs={12}
           sm={7}
           lg={6}
@@ -45,10 +34,10 @@ export default function Login() {
             component='h1'
             color='primary'
           >
-            Se connecter à HitMyTeam
+            S'inscrire à HitMyTeam
           </Typography>
           <Typography variant='h5' component='h2'>
-            Veuillez vous connecter afin d’accéder à la
+            Veuillez vous inscrire afin d’accéder à la
             plateforme
           </Typography>
           <div className='buttons'>
@@ -59,7 +48,7 @@ export default function Login() {
               startIcon={<TwitterIcon />}
               className='twitter-button'
             >
-              Se connecter avec Twitter
+              S'inscrire avec Twitter
             </Button>
             <Button
               variant='contained'
@@ -71,7 +60,7 @@ export default function Login() {
                 />
               }
             >
-              Se connecter avec Discord
+              S'inscrire avec Discord
             </Button>
           </div>
           <div className='middle-log'>
@@ -94,37 +83,37 @@ export default function Login() {
               className='username'
             />
             <TextField
+              id='email'
+              label='Email'
+              type='email'
+              variant='outlined'
+            />
+            <TextField
               id='password'
               label='Mot de passe'
               variant='outlined'
               type='password'
+              className='password'
             />
-            <div className='form-footer'>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    name='stay-logged'
-                    color='primary'
-                  />
-                }
-                label='Rester connecté'
-              />
-              <Link
-                className='pass-forgot'
-              >
-                Mot de passe oublié ?
-              </Link>
-            </div>
             <Button variant='contained' color='primary'>
-              Se connecter
+              S'inscrire
             </Button>
           </form>
           <Link
-            className='not-registered'
-            to='/inscription'
+            className='already-registered'
+            to='/connexion'
           >
-            Pas encore de compte ? Inscrivez-vous
+            Déjà un compte ? Connectez-vous
           </Link>
+        </Grid>
+        <Grid
+          item
+          className='left-register'
+          xs={12}
+          sm={5}
+          lg={6}
+        >
+          <img src={imageCover} alt='img-esport' />
         </Grid>
       </Grid>
       <footer>
