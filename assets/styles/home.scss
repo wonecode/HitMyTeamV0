@@ -1,8 +1,12 @@
 .home {
   .left-home {
-    background: no-repeat center/160% url('https://images.unsplash.com/photo-1538481199705-c710c4e965fc?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1132&q=80');
-    object-fit: cover;
     height: 93vh;
+
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
 
     @media screen and (max-width: 425px) {
       display: none;

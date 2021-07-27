@@ -13,6 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import '../styles/login.scss';
 import Link from '@material-ui/core/Link';
 import { Helmet } from 'react-helmet';
+import imageCover from '../images/esport-1.jpg';
 
 library.add(faDiscord);
 
@@ -29,7 +30,9 @@ export default function Login() {
           xs={12}
           sm={5}
           lg={6}
-        />
+        >
+          <img src={imageCover} alt='img-esport' />
+        </Grid>
         <Grid
           item
           className='right-login'
