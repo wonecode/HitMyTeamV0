@@ -4,10 +4,16 @@ import Typography from '@material-ui/core/Typography';
 import React from 'react';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import '../styles/home.scss';
+import { Link } from 'react-router-dom';
+import { IconButton } from '@material-ui/core';
+import { Helmet } from 'react-helmet';
 
 export default function Home() {
   return (
     <main className='home'>
+      <Helmet>
+        <title>Accueil | HitMyTeam</title>
+      </Helmet>
       <Grid container>
         <Grid
           item
@@ -55,6 +61,8 @@ export default function Home() {
               size='large'
               variant='outlined'
               color='primary'
+              component={Link}
+              to='/connexion'
             >
               Se connecter
             </Button>
@@ -65,7 +73,12 @@ export default function Home() {
         <Typography className='title-footer' component='p'>
           © 2021 HitMyTeam
         </Typography>
-        <TwitterIcon color='primary' />
+        <IconButton
+          color='primary'
+          href='https://twitter.com/HitMyTeamGG'
+        >
+          <TwitterIcon />
+        </IconButton>
       </footer>
     </main>
   );

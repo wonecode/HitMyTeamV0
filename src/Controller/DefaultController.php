@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="default")
+     * @Route("/{reactRouting}", name="default", defaults={"reactRouting": null})
      */
     public function index(): Response
     {
