@@ -1,0 +1,21 @@
+@import 'variables';
+
+.MuiToolbar-regular {
+  background-color: #535353;
+  color: $light;
+}
+
+.nav-text {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.links {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}

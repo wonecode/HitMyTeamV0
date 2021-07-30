@@ -11,6 +11,7 @@ import {
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Layout from './components/Layout';
 
 const theme = createTheme({
   palette: {
@@ -32,21 +33,19 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <div className='App'>
-          <div className='content'>
-            <Switch>
-              <Route exact path='/'>
-                <Home />
-              </Route>
-              <Route path='/connexion'>
-                <Login />
-              </Route>
-              <Route path='/inscription'>
-                <Register />
-              </Route>
-            </Switch>
-          </div>
-        </div>
+        <Layout>
+          <Switch>
+            <Route exact path='/'>
+              <Home />
+            </Route>
+            <Route path='/connexion'>
+              <Login />
+            </Route>
+            <Route path='/inscription'>
+              <Register />
+            </Route>
+          </Switch>
+        </Layout>
       </Router>
     </ThemeProvider>
   );
