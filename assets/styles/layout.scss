@@ -1,0 +1,36 @@
+@import 'variables';
+
+.MuiToolbar-regular {
+  background-color: #535353;
+  color: $light;
+}
+
+.nav-text {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.MuiTypography-h6 {
+  .MuiSvgIcon-root {
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+}
+
+.links {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+
+  .MuiListItemIcon-root {
+    padding-left: 7px;
+
+    @media screen and (max-width: 425px) {
+      padding-left: 0;
+    }
+  }
+}
