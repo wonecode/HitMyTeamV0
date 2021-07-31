@@ -33,19 +33,18 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
-        <Layout>
-          <Switch>
-            <Route exact path='/'>
-              <Home />
-            </Route>
-            <Route path='/connexion'>
-              <Login />
-            </Route>
-            <Route path='/inscription'>
-              <Register />
-            </Route>
-          </Switch>
-        </Layout>
+        <Switch>
+          <Route exact path='/'>
+            <Home />
+          </Route>
+          <Route path='/connexion'>
+            <Login />
+          </Route>
+          <Route path='/inscription'>
+            <Register />
+          </Route>
+          <Layout></Layout>
+        </Switch>
       </Router>
     </ThemeProvider>
   );
