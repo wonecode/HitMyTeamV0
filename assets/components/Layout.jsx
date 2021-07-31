@@ -24,6 +24,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../styles/layout.scss';
+import Icon from '@material-ui/core/Icon';
 
 const drawerWidth = 240;
 
@@ -69,14 +70,14 @@ const useStyles = makeStyles((theme) => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
   },
   drawerOpen: {
     width: drawerWidth,
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
-    })
+    }),
   },
   drawerClose: {
     transition: theme.transitions.create('width', {
@@ -173,14 +174,8 @@ export default function Layout({ children }) {
           </IconButton>
           <div className='nav-text'>
             {mainMenuItems.map((item) => (
-              <Typography
-                variant='h6'
-                noWrap
-                key={item.text}
-              >
-                {location.pathname === item.path
-                  ? item.text
-                  : ''}
+              <Typography variant='h6' noWrap>
+                HitMyTeam
               </Typography>
             ))}
             <Avatar className={classes.avatar}></Avatar>
@@ -201,7 +196,7 @@ export default function Layout({ children }) {
         }}
       >
         <div className={classes.toolbar}>
-          <Typography>HitMyTeam</Typography>
+          <Typography>HMT</Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? (
               <ChevronRightIcon />
