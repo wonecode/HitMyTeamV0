@@ -1,0 +1,81 @@
+@import 'variables';
+
+.profile {
+  .header {
+    width: 100%;
+    height: 300px;
+    background: no-repeat center/100%
+      url('https://assets.website-files.com/5c1bb997cb1dd611a0e6c8ce/5e2248cf8ce4aaac7e08d241_WestStudio_LOL_Splash_10.jpg');
+    display: flex;
+    align-items: flex-end;
+    padding: 48px;
+
+    .header-content {
+      display: flex;
+      align-items: center;
+
+      .avatar {
+        width: 100px;
+        height: 100px;
+        margin-right: 32px;
+      }
+    }
+  }
+
+  .content {
+    width: 100%;
+    padding: 48px;
+
+    @media screen and (max-width: 470px) {
+        padding: 8px;
+    }
+
+    .player-rank {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      margin-bottom: 24px;
+
+      img {
+        width: 150px;
+        margin-right: 24px;
+      }
+
+      .player-ranktier {
+        font-weight: 900;
+      }
+
+      .player-winrate {
+        font-weight: 300;
+        margin: 8px 0 16px 0;
+      }
+    }
+
+    .player-role {
+      padding: 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 24px;
+
+      img {
+          width: 40px;
+          margin-right: 16px;
+      }
+    }
+
+    .player-champions {
+      padding: 16px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      img {
+          width: 40px;
+          margin-right: 16px;
+          border-radius: 100%;
+      }
+    }
+  }
+}

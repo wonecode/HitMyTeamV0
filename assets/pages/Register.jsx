@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
-import imageCover from '../images/esport-3.jpg';
+import imageCover from '../images/page-assets/esport-3.jpg';
 import '../styles/register.scss';
 
 library.add(faDiscord);

@@ -7,7 +7,7 @@ import '../styles/home.scss';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
-import imageCover from '../images/esport-2.jpg';
+import imageCover from '../images/page-assets/esport-2.jpg';
 
 export default function Home() {
   return (
