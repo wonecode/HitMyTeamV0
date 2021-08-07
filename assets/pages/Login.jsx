@@ -12,7 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import '../styles/login.scss';
 import { Helmet } from 'react-helmet';
-import imageCover from '../images/esport-1.jpg';
+import imageCover from '../images/page-assets/esport-1.jpg';
 import { Link } from 'react-router-dom';
 
 library.add(faDiscord);

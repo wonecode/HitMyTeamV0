@@ -12,12 +12,17 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Layout from './components/Layout';
+import Profile from './pages/Profile';
+import blue from '@material-ui/core/colors/blue';
 
 const theme = createTheme({
   palette: {
     type: 'dark',
     primary: {
       main: '#F7CA18',
+    },
+    secondary: {
+      main: blue[500]
     },
   },
   typography: {
@@ -43,7 +48,11 @@ function App() {
           <Route path='/inscription'>
             <Register />
           </Route>
-          <Layout></Layout>
+          <Layout>
+            <Route path='/profil'>
+              <Profile />
+            </Route>
+          </Layout>
         </Switch>
       </Router>
     </ThemeProvider>
