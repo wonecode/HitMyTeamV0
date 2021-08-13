@@ -1,7 +1,7 @@
 @import 'variables';
 
 .MuiToolbar-regular {
-  background-color: #535353;
+  background-color: #303135;
   color: $light;
 }
 
@@ -25,14 +25,4 @@
   @media screen and (max-width: 425px) {
     padding-left: 0;
   }
-}
-
-form {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-
-    .MuiTextField-root {
-        margin-right: 16px;
-    }
 }

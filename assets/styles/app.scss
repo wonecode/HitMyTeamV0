@@ -8,7 +8,7 @@
 @import 'profile';
 
 body {
-  background-color: $dark;
+  background-color: $dark !important;
   color: $light;
   margin: 0;
   font-family: 'Quicksand';
