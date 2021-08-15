@@ -6,8 +6,6 @@ import Typography from '@material-ui/core/Typography';
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import '../styles/profile.scss';
-import Bottom from '../images/lol-positions/Bottom.svg';
-import Jungle from '../images/lol-positions/Jungle.svg';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -21,9 +19,18 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import { Skeleton } from '@material-ui/lab';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { SnackbarProvider, useSnackbar } from 'notistack';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
-const riotToken = 'RGAPI-e4237dc8-7e4b-4194-bb65-623236f1e263';
+const riotHeader = {
+  'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36',
+  'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
+  'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
+  Origin: 'https://developer.riotgames.com',
+  'X-Riot-Token': 'RGAPI-60d14418-379a-458c-890f-d7319122aa93',
+};
 
 function getSteps() {
   return [
@@ -92,6 +99,10 @@ export default function Profile() {
   const [playerMainRole, setPlayerMainRole] = React.useState('');
   const [playerMainRoleImg, setPlayerMainRoleImg] = React.useState('');
   const [playerLeaguepoints, setPlayerLeaguepoints] = React.useState('');
+  const [playerHotstreak, setPlayerHotstreak] = React.useState('');
+  const [playerWins, setPlayerWins] = React.useState('');
+  const [playerLosses, setPlayerLosses] = React.useState('');
+  const [copyCode, setCopyCode] = React.useState(false);
   const steps = getSteps();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -132,16 +143,18 @@ export default function Profile() {
 
     if (summonerName) {
       const summonerResponse = await fetch(
-        'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' +
-          summonerName +
-          '?api_key=' +
-          riotToken
+        encodeURI(
+          'https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/' + summonerName
+        ),
+        {
+          headers: riotHeader,
+        }
       );
 
       if (summonerResponse.status === 200) {
         setSummonerData(await summonerResponse.json());
         formSummonerInvisible();
-        setUuid(uuidv4() + '-' + summonerName);
+        setUuid(uuidv4() + summonerName[0]);
         handleNext();
         codeVerificationVisible();
       } else if (summonerResponse.status === 404) {
@@ -159,10 +172,6 @@ export default function Profile() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
   const handleReset = () => {
     handleClose();
     setActiveStep(0);
@@ -173,12 +182,17 @@ export default function Profile() {
     setSummonerNameError(false);
   };
 
+  const codePaste = () => {
+    setCopyCode(true);
+  };
+
   const verifySummoner = async () => {
     const summonerKeyResponse = await fetch(
       'https://euw1.api.riotgames.com/lol/platform/v4/third-party-code/by-summoner/' +
-        summonerData.id +
-        '?api_key=' +
-        riotToken
+        summonerData.id,
+      {
+        headers: riotHeader,
+      }
     );
 
     if (summonerKeyResponse.status === 200) {
@@ -195,12 +209,13 @@ export default function Profile() {
         );
         setVerifySummonerError(false);
         setVerifySummonerErrorText('');
+        setCopyCode(false);
 
         const leagueResponse = await fetch(
-          'https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/' +
-            summonerData.id +
-            '?api_key=' +
-            riotToken
+          'https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/' + summonerData.id,
+          {
+            headers: riotHeader,
+          }
         );
         const leagueData = await leagueResponse.json();
 
@@ -241,9 +256,10 @@ export default function Profile() {
         const matchesReponse = await fetch(
           'https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/' +
             accountId +
-            '?queue=420' +
-            '&api_key=' +
-            riotToken
+            '?queue=420',
+          {
+            headers: riotHeader,
+          }
         );
 
         const matchesData = await matchesReponse.json();
@@ -262,6 +278,10 @@ export default function Profile() {
         setPlayerTier(firstCaps(playerStats.tier));
         setPlayerRank(playerStats.rank.length);
         setPlayerLeaguepoints(playerStats.leaguePoints);
+        setPlayerHotstreak(playerStats.hotStreak);
+        setPlayerWins(playerStats.wins);
+        setPlayerLosses(playerStats.losses);
+        setSummonerName(playerStats.summonerName);
 
         let lane = [];
         for (let i = 0; i < matchesList.length; i++) {
@@ -304,7 +324,7 @@ export default function Profile() {
         } else {
           setPlayerMainRoleImg(require(`../images/lol-positions/${firstCaps(playerMainRole)}.svg`));
         }
-        
+
         enqueueSnackbar('Votre profil a bien été chargé !', {
           variant: 'success',
           anchorOrigin: {
@@ -325,10 +345,10 @@ export default function Profile() {
   const getLeagueData = async () => {
     if (isVerified === true) {
       const leagueResponse = await fetch(
-        'https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/' +
-          summonerData.id +
-          '?api_key=' +
-          riotToken
+        'https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/' + summonerData.id,
+        {
+          headers: riotHeader,
+        }
       );
       const leagueData = await leagueResponse.json();
 
@@ -391,19 +411,19 @@ export default function Profile() {
               ) : (
                 <Skeleton width={150} height={40} />
               )}
-              {playerLeaguepoints !== '' ? (
+              {playerLeaguepoints !== '' && playerHotstreak !== '' ? (
                 <Typography variant='body1' className='player-leaguepoints' component='p'>
                   {`${playerLeaguepoints} LP `}
                   <Tooltip title='Série de victoires' aria-label='hotStreak' placement='top' arrow>
-                    <span>{leagueData.hotStreak === true ? '🔥' : '❄️'}</span>
+                    <span>{playerHotstreak === true ? '🔥' : '❄️'}</span>
                   </Tooltip>
                 </Typography>
               ) : (
                 <Skeleton width={150} height={30} />
               )}
               <Typography variant='body2' className='player-winrate' component='p'>
-                {playerWinrate !== '' ? (
-                  [leagueData.wins, 'V', '/', leagueData.losses, 'D', ' (', playerWinrate, ')']
+                {playerWinrate !== '' && playerWins !== '' && playerLosses !== '' ? (
+                  [playerWins, 'V', '/', playerLosses, 'D', ' (', playerWinrate, ')']
                 ) : (
                   <Skeleton width={150} height={20} />
                 )}
@@ -521,10 +541,18 @@ export default function Profile() {
               {summonerNameErrorText}
             </Typography>
           </form>
+          <Typography variant='body2' component='p' color='primary'>
+            {copyCode === true ? 'Code copié !' : ''}
+          </Typography>
           <div className='uuid-code' id={hideCodeVerification}>
-            <Typography className='code' color='primary'>
-              {uuid}
-            </Typography>
+            <CopyToClipboard text={uuid}>
+              <Typography onClick={codePaste} className='code' color='primary'>
+                {uuid}
+                <button className='copy' aria-label='copy-to-clipboard'>
+                  <FileCopyIcon fontSize='small' />
+                </button>
+              </Typography>
+            </CopyToClipboard>
             <Button size='small' variant='contained' onClick={verifySummoner}>
               Vérifier
             </Button>
