@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import App from './app';
 import './styles/app.scss';
 import { SnackbarProvider } from 'notistack';
 
