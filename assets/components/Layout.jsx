@@ -21,14 +21,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../styles/layout.scss';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { Button, Tooltip } from '@material-ui/core';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const drawerWidth = 240;
 
@@ -118,17 +110,6 @@ export default function Layout({ children }) {
   const [openAppbar, setOpenAppbar] = React.useState(false);
   const history = useHistory();
   const location = useLocation();
-  const [openSettings, setOpenSettings] = React.useState(false);
-  const [summonerName, setSummonerName] = React.useState('');
-  const [summonerNameError, setSummonerNameError] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpenSettings(true);
-  };
-
-  const handleClose = () => {
-    setOpenSettings(false);
-  };
 
   const handleDrawerOpen = () => {
     setOpenAppbar(true);
@@ -150,7 +131,6 @@ export default function Layout({ children }) {
     {
       text: 'Paramètres',
       icon: <SettingsIcon />,
-      onClick: handleClickOpen,
     },
     {
       text: 'Déconnexion',
@@ -158,15 +138,6 @@ export default function Layout({ children }) {
       path: '/deconnexion',
     },
   ];
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSummonerNameError(false);
-
-    if ((summonerName == '')) {
-      setSummonerNameError(true);
-    }
-  };
 
   return (
     <div className={classes.root}>
@@ -237,49 +208,13 @@ export default function Layout({ children }) {
         <Divider />
         <List>
           {secondMenuItems.map((item) => (
-            <ListItem button key={item.text} onClick={item.onClick}>
+            <ListItem button key={item.text}>
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItem>
           ))}
         </List>
       </Drawer>
-
-      <Dialog open={openSettings} onClose={handleClose} aria-labelledby='form-dialog-title'>
-        <DialogTitle id='form-dialog-title'>Paramètres</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Veuillez saisir votre nom d'invocateur afin de remplir votre profil. Vous devrez ensuite
-            le valider en ajoutant la clé qui sera générée, dans l'onglet "Verifications" sur votre
-            client League of Legends.
-          </DialogContentText>
-          <form noValidate autoComplete='off' onSubmit={handleSubmit}>
-            <TextField
-              onChange={(e) => setSummonerName(e.target.value)}
-              autoFocus
-              margin='dense'
-              label="Nom d'invocateur"
-              type='text'
-              fullWidth
-              error={summonerNameError}
-              required
-            />
-            <Tooltip title='Envoyer' aria-label='envoyer' placement='top' arrow>
-              <IconButton type='submit' color='default'>
-                <CheckCircleIcon />
-              </IconButton>
-            </Tooltip>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color='primary'>
-            Annuler
-          </Button>
-          <Button type='submit' color='primary'>
-            Enregistrer
-          </Button>
-        </DialogActions>
-      </Dialog>
 
       <div className={classes.page}>
         <div className={classes.toolbar}></div>

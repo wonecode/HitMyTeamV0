@@ -8,7 +8,12 @@
       url('https://assets.website-files.com/5c1bb997cb1dd611a0e6c8ce/5e2248cf8ce4aaac7e08d241_WestStudio_LOL_Splash_10.jpg');
     display: flex;
     align-items: flex-end;
+    justify-content: space-between;
     padding: 48px;
+
+    h1 {
+      font-weight: 500;
+    }
 
     .header-content {
       display: flex;
@@ -27,7 +32,7 @@
     padding: 48px;
 
     @media screen and (max-width: 470px) {
-        padding: 8px;
+      padding: 8px;
     }
 
     .player-rank {
@@ -35,11 +40,17 @@
       align-items: center;
       justify-content: center;
       padding: 32px;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
+      border-left: 5px solid $primary;
 
       img {
         width: 150px;
-        margin-right: 24px;
+        margin-right: 12px;
+      }
+
+      div {
+        margin-left: 12px;
+        // margin-right: 15px;
       }
 
       .player-ranktier {
@@ -52,30 +63,119 @@
       }
     }
 
-    .player-role {
-      padding: 16px;
+    .player-spec {
       display: flex;
-      flex-direction: row;
       align-items: center;
-      margin-bottom: 24px;
+      flex-direction: row;
 
-      img {
-          width: 40px;
-          margin-right: 16px;
+      .player-role {
+        width: 100%;
+        height: 60px;
+        padding: 13px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-right: 4px;
+        border-left: 5px solid $primary;
+
+        .main-role-content {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          img {
+            width: 27px;
+            margin-right: 12px;
+          }
+
+          h6 {
+            font-weight: 400;
+          }
+
+          .MuiSkeleton-root {
+            margin: 0 6px;
+          }
+        }
       }
-    }
 
-    .player-champions {
-      padding: 16px;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
+      .player-champions {
+        width: 100%;
+        height: 60px;
+        padding: 12px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-left: 4px;
+        border-left: 5px solid $primary;
 
-      img {
-          width: 40px;
-          margin-right: 16px;
+        img {
+          width: 35px;
+          margin: 0 6px;
           border-radius: 100%;
+        }
+
+        .MuiSkeleton-root {
+          margin: 0 6px;
+        }
       }
     }
   }
+}
+
+.main-content-dialog {
+  form {
+    .init-summoner {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+
+      .MuiTextField-root {
+        margin-right: 16px;
+      }
+    }
+  }
+}
+
+.MuiPaper-root {
+  background-color: #303135 !important;
+}
+
+#form-invisible {
+  display: none;
+}
+
+#code-invisible {
+  display: none;
+}
+
+.uuid-code {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  .code {
+    background-color: $dark;
+    padding: 8px;
+    border-radius: 8px;
+    width: 100%;
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .copy {
+    padding: 4px 0 0 0;
+    background: none;
+    border: none;
+    color: $primary;
+    cursor: pointer;
+  }
+}
+
+.MuiTooltip-tooltip {
+  font-size: 11px !important;
 }
