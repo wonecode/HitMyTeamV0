@@ -22,6 +22,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
+const RIOT_TOKEN = process.env.RIOT_TOKEN; 
 
 const riotHeader = {
   'User-Agent':
@@ -29,7 +30,7 @@ const riotHeader = {
   'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
   'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
   Origin: 'https://developer.riotgames.com',
-  'X-Riot-Token': 'RGAPI-60d14418-379a-458c-890f-d7319122aa93',
+  'X-Riot-Token': RIOT_TOKEN,
 };
 
 function getSteps() {
