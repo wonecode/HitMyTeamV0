@@ -180,6 +180,7 @@ export default function Profile() {
     setVerifySummonerErrorText('');
     setSummonerNameErrorText('');
     setSummonerNameError(false);
+    setCopyCode(false);
   };
 
   const codePaste = () => {
@@ -455,7 +456,7 @@ export default function Profile() {
                 {playerMainRole !== '' ? (
                   <Typography variant='h6'>{playerMainRole}</Typography>
                 ) : (
-                  <Skeleton width={100} />
+                  <Skeleton width={100} height={35} />
                 )}
               </div>
             </Paper>
