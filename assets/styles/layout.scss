@@ -1,5 +1,9 @@
 @import 'variables';
 
+.logo-hmt {
+    width: 140px;
+}
+
 .MuiToolbar-regular {
   background-color: #303135;
   color: $light;
@@ -10,6 +14,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  .logo-typo {
+    width: 150px;
+  }
 }
 
 .MuiTypography-h6 {

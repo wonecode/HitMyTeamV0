@@ -7,7 +7,8 @@ import '../styles/home.scss';
 import { Link } from 'react-router-dom';
 import { IconButton } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
-import imageCover from '../images/page-assets/esport-2.jpg';
+import imageCover from '../images/page-assets/HMT-Assets-v1.png';
+import logoTypo from '../images/logo/logo-typo-white.png';
 
 export default function Home() {
   return (
@@ -16,36 +17,12 @@ export default function Home() {
         <title>Accueil | HitMyTeam</title>
       </Helmet>
       <Grid container>
-        <Grid
-          item
-          className='left-home'
-          xs={12}
-          sm={5}
-          lg={6}
-        >
+        <Grid item className='left-home' xs={12} sm={5} lg={6}>
           <img src={imageCover} alt='img-esport' />
         </Grid>
-        <Grid
-          item
-          className='right-home'
-          xs={12}
-          sm={7}
-          lg={6}
-        >
-          <Typography
-            variant='h5'
-            component='h1'
-            className='logo-title'
-            gutterBottom
-          >
-            HitMyTeam
-          </Typography>
-          <Typography
-            variant='h2'
-            component='h2'
-            color='primary'
-            gutterBottom
-          >
+        <Grid item className='right-home' xs={12} sm={7} lg={6}>
+          <img src={logoTypo} alt='hitmyteam' className='logo-title' />
+          <Typography variant='h2' component='h2' color='primary' gutterBottom>
             Prenez part à l’histoire dès maintenant
           </Typography>
           <Typography variant='h4' component='h3'>
@@ -78,10 +55,7 @@ export default function Home() {
         <Typography className='title-footer' component='p'>
           © 2021 HitMyTeam
         </Typography>
-        <IconButton
-          color='primary'
-          href='https://twitter.com/HitMyTeamGG'
-        >
+        <IconButton color='primary' href='https://twitter.com/HitMyTeamGG'>
           <TwitterIcon />
         </IconButton>
       </footer>

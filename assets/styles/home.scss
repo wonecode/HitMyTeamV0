@@ -5,9 +5,9 @@
     height: 93vh;
 
     img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
     }
 
     @media screen and (max-width: 425px) {
@@ -23,7 +23,8 @@
     padding: 0 132px;
 
     .logo-title {
-      margin-bottom: 32px;
+      margin-bottom: 16px;
+      width: 200px;
     }
 
     h2 {
@@ -45,7 +46,8 @@
         margin-bottom: 24px;
       }
 
-      button, a {
+      button,
+      a {
         padding: 14px 22px;
       }
     }

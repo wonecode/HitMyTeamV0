@@ -21,6 +21,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../styles/layout.scss';
+import logoTypo from '../images/logo/logo-typo-white.png';
+import logoSymbole from '../images/logo/logo-symbole-typo-yellow.png';
 
 const drawerWidth = 240;
 
@@ -162,9 +164,7 @@ export default function Layout({ children }) {
           </IconButton>
           <div className='nav-text'>
             {mainMenuItems.map((item) => (
-              <Typography variant='h6' noWrap>
-                HitMyTeam
-              </Typography>
+              <img src={logoTypo} alt='hitmyteam' className='logo-typo' />
             ))}
             <Avatar className={classes.avatar}></Avatar>
           </div>
@@ -184,7 +184,7 @@ export default function Layout({ children }) {
         }}
       >
         <div className={classes.toolbar}>
-          <Typography>HMT</Typography>
+          <img src={logoSymbole} alt='logo-hitmyteam' className='logo-hmt' />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>

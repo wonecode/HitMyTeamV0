@@ -24,32 +24,15 @@ export default function Login() {
         <title>Connexion | HitMyTeam</title>
       </Helmet>
       <Grid container>
-        <Grid
-          item
-          className='left-login'
-          xs={12}
-          sm={5}
-          lg={6}
-        >
+        <Grid item className='left-login' xs={12} sm={5} lg={6}>
           <img src={imageCover} alt='img-esport' />
         </Grid>
-        <Grid
-          item
-          className='right-login'
-          xs={12}
-          sm={7}
-          lg={6}
-        >
-          <Typography
-            variant='h3'
-            component='h1'
-            color='primary'
-          >
+        <Grid item className='right-login' xs={12} sm={7} lg={6}>
+          <Typography variant='h3' component='h1' color='primary'>
             Se connecter à HitMyTeam
           </Typography>
           <Typography variant='h5' component='h2'>
-            Veuillez vous connecter afin d’accéder à la
-            plateforme
+            Veuillez vous connecter afin d’accéder à la plateforme
           </Typography>
           <div className='buttons'>
             <Button
@@ -65,23 +48,14 @@ export default function Login() {
               variant='contained'
               color='default'
               size='large'
-              startIcon={
-                <FontAwesomeIcon
-                  icon={['fab', 'discord']}
-                />
-              }
+              startIcon={<FontAwesomeIcon icon={['fab', 'discord']} />}
             >
               Se connecter avec Discord
             </Button>
           </div>
           <div className='middle-log'>
             <div className='bar'></div>
-            <Typography
-              variant='h6'
-              component='h3'
-              align='center'
-              className='or'
-            >
+            <Typography variant='h6' component='h3' align='center' className='or'>
               Ou
             </Typography>
             <div className='bar'></div>
@@ -93,36 +67,19 @@ export default function Login() {
               variant='outlined'
               className='username'
             />
-            <TextField
-              id='password'
-              label='Mot de passe'
-              variant='outlined'
-              type='password'
-            />
+            <TextField id='password' label='Mot de passe' variant='outlined' type='password' />
             <div className='form-footer'>
               <FormControlLabel
-                control={
-                  <Checkbox
-                    name='stay-logged'
-                    color='primary'
-                  />
-                }
+                control={<Checkbox name='stay-logged' color='primary' />}
                 label='Rester connecté'
               />
-              <Link
-                className='pass-forgot'
-              >
-                Mot de passe oublié ?
-              </Link>
+              <Link className='pass-forgot'>Mot de passe oublié ?</Link>
             </div>
             <Button variant='contained' color='primary'>
               Se connecter
             </Button>
           </form>
-          <Link
-            className='not-registered'
-            to='/inscription'
-          >
+          <Link className='not-registered' to='/inscription'>
             Pas encore de compte ? Inscrivez-vous
           </Link>
         </Grid>
@@ -131,10 +88,7 @@ export default function Login() {
         <Typography className='title-footer' component='p'>
           © 2021 HitMyTeam
         </Typography>
-        <IconButton
-          color='primary'
-          href='https://twitter.com/HitMyTeamGG'
-        >
+        <IconButton color='primary' href='https://twitter.com/HitMyTeamGG'>
           <TwitterIcon />
         </IconButton>
       </footer>
