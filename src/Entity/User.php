@@ -53,11 +53,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ],
         'put' => [
             "security" => "is_granted('ROLE_USER')",
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
             'denormalization_context' => [
                 'groups' => ['put:user:item']
             ]
         ],
-        'delete',
+        'delete' => [
+            "security" => "is_granted('ROLE_ADMIN')",
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
+        ],
         'get' => [
             "security" => "is_granted('ROLE_USER')",
             'openapi_context' => [
