@@ -37,7 +37,7 @@ class UserFixtures extends Fixture
         $user->setEmail('admin@hitmyteam.gg');
         $user->setPassword($this->passwordHasher->hashPassword(
             $user,
-            'user'
+            'admin'
         ));
         $user->setUsername('admin');
         $user->setCreatedAt(new DateTimeImmutable('', new DateTimeZone('Europe/Paris')));
