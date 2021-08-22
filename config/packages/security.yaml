@@ -12,17 +12,35 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        jwt:
+            lexik_jwt:
+                class: App\Entity\User
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            lazy: true
-            user_checker: App\Security\UserChecker
+        login:
             provider: app_user_provider
-            custom_authenticator: App\Security\FormLoginAuthenticator
-            logout:
-                path: app_logout
+            pattern: ^/security/api/v1/login$
+            stateless: true
+            json_login:
+                check_path: app_api_login
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        api:
+            provider: jwt
+            pattern: ^/api/v1
+            stateless: true
+            jwt: ~
+       # main:
+           # lazy: true
+           # user_checker: App\Security\UserChecker
+           # provider: app_user_provider
+            # json_login:
+            #    check_path: app_api_login
+            # custom_authenticator: App\Security\FormLoginAuthenticator
+            # logout:
+                # path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -35,5 +53,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/security/api/v1/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }

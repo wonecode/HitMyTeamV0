@@ -122,4 +122,19 @@ class SecurityController extends AbstractController
 
         return $this->redirectToRoute('app_register');
     }
+
+    #[
+        Route(path: '/api/v1/login', name: 'api_login', methods: ['POST'])
+    ]
+    public function jsonLogin()
+    {
+        // jwt no logic here
+
+        /* $user $user = $this->getUser();
+        dd($user);
+        return $this->json([
+            'username' => $user->getUsername(),
+            'roles' => $user->getRoles()
+        ]);*/
+    }
 }

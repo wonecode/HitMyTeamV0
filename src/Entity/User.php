@@ -2,64 +2,135 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Controller\MeController;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+#[ApiResource(
+    collectionOperations: [
+        'get' =>[
+            'normalization_context' => [
+                'groups' => ['read:user:collection', 'read:user:item', 'read:league:item']
+            ],
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
+        ],
+        'post' => [
+            'denormalization_context' => [
+                'groups' => ['post:user:item']
+            ]
+        ]
+    ],
+    itemOperations: [
+        'me' => [
+            'pagination_enabled' => false,
+            'path' => '/me',
+            'method' => 'get',
+            'controller' => MeController::class,
+            'read' => false,
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]],
+            ],
+            'normalization_context' => [
+                'groups' => ['read:user:me']
+            ]
+        ],
+        'put' => [
+            'denormalization_context' => [
+                'groups' => ['put:user:item']
+            ]
+        ],
+        'delete',
+        'get' => [
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
+            'normalization_context' => [
+                'groups' => ['read:user:collection', 'read:user:item', 'read:league:item']
+            ]
+        ]
+    ],
+    security: 'is_granted("ROLE_USER")',
+)]
+class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['read:user:me'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
+    #[Groups(['read:user:collection', 'put:user:item', 'post:user:item', 'read:user:me'])]
     private $email;
 
     /**
      * @ORM\Column(type="json")
      */
+    #[Groups(['read:user:item', 'read:user:me'])]
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
+    #[Groups(['post:user:item'])]
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['read:user:collection', 'read:user:item', 'put:user:item', 'post:user:item',' read:user:me'])]
     private $username;
 
     /**
      * @ORM\Column(type="datetime_immutable")
      */
+    #[Groups(['read:user:item', 'post:user:item'])]
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
+    #[Groups(['put:user:item'])]
     private $updatedAt;
 
     /**
      * @ORM\Column(type="boolean")
      */
+    #[Groups(['read:user:item','put:user:item', 'read:user:me'])]
     private $isVerified = false;
+
+    /**
+     * @ORM\OneToOne(targetEntity=LeagueUser::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    #[Groups(['read:user:item', 'put:user:item'])]
+    private $leagueUser;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId($id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -89,7 +160,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string) $this->email;
     }
 
     /**
@@ -187,5 +258,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+    public function getLeagueUser(): ?LeagueUser
+    {
+        return $this->leagueUser;
+    }
+
+    public function setLeagueUser(LeagueUser $leagueUser): self
+    {
+        // set the owning side of the relation if necessary
+        if ($leagueUser->getUser() !== $this) {
+            $leagueUser->setUser($this);
+        }
+
+        $this->leagueUser = $leagueUser;
+
+        return $this;
+    }
+
+    public static function createFromPayload($userIdentifier, array $payload)
+    {
+        $user = new User();
+        $user->setId($payload['id']);
+        $user->setEmail($userIdentifier);
+        $user->setRoles($payload['roles']);
+        return $user;
     }
 }
