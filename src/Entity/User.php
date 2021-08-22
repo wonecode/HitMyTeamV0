@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiResource(
     collectionOperations: [
         'get' =>[
+            "security" => "is_granted('ROLE_USER')",
             'normalization_context' => [
                 'groups' => ['read:user:collection', 'read:user:item', 'read:league:item']
             ],
@@ -27,6 +28,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
             ],
         ],
         'post' => [
+            'openapi_context' => [
+                'security' => [],
+            ],
             'denormalization_context' => [
                 'groups' => ['post:user:item']
             ]
@@ -34,6 +38,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
     ],
     itemOperations: [
         'me' => [
+            "security" => "is_granted('ROLE_USER')",
             'pagination_enabled' => false,
             'path' => '/me',
             'method' => 'get',
@@ -47,12 +52,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
             ]
         ],
         'put' => [
+            "security" => "is_granted('ROLE_USER')",
             'denormalization_context' => [
                 'groups' => ['put:user:item']
             ]
         ],
         'delete',
         'get' => [
+            "security" => "is_granted('ROLE_USER')",
             'openapi_context' => [
                 'security' => [['bearerAuth' => []]]
             ],
@@ -60,8 +67,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
                 'groups' => ['read:user:collection', 'read:user:item', 'read:league:item']
             ]
         ]
-    ],
-    security: 'is_granted("ROLE_USER")',
+    ]
 )]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
