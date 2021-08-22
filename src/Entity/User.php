@@ -28,9 +28,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
             ],
         ],
         'post' => [
-            'openapi_context' => [
-                'security' => [],
-            ],
             'denormalization_context' => [
                 'groups' => ['post:user:item']
             ]
