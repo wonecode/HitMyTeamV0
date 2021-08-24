@@ -11,7 +11,9 @@ use ArrayObject;
 
 class OpenApiFactory implements OpenApiFactoryInterface
 {
-    public function __construct(private OpenApiFactoryInterface $decorated){}
+    public function __construct(private OpenApiFactoryInterface $decorated)
+    {
+    }
 
     public function __invoke(array $context = []): OpenApi
     {
@@ -39,6 +41,10 @@ class OpenApiFactory implements OpenApiFactoryInterface
                 'token' => [
                     'type' => 'string',
                     'readOnly' => true,
+                ],
+                'refresh_token' => [
+                    'type' => 'string',
+                    'readOnly' => true,
                 ]
             ]
         ]);
@@ -64,7 +70,7 @@ class OpenApiFactory implements OpenApiFactoryInterface
                 tags: ['Token'],
                 responses: [
                     '200' => [
-                        'description' => 'Get JWT token',
+                        'description' => 'Get JWT token and refresh Token with Credentials',
                         'content' => [
                             'application/json' => [
                                 'schema' => [
@@ -89,6 +95,50 @@ class OpenApiFactory implements OpenApiFactoryInterface
         );
 
         $openApi->getPaths()->addPath('/security/api/v1/login', $pathItem);
+
+
+        $schemas['RefreshToken'] = new \ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'refresh_token' => [
+                    'type' => 'string',
+                    'example' => 'your token refresh',
+                ],
+            ],
+        ]);
+
+        $pathItem = new PathItem(
+            ref: 'JWT Refresh Token',
+            post: new Operation(
+                operationId: 'refreshPostCredentialsItem',
+                tags: ['Token'],
+                responses: [
+                    '200' => [
+                        'description' => 'Get JWT token and refresh Token without Credential just last refresh token',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/Token',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                summary: 'Get JWT refresh token & new token.',
+                requestBody: new RequestBody(
+                    description: 'refresh new JWT Token & refresh_token',
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                '$ref' => '#/components/schemas/RefreshToken',
+                            ],
+                        ],
+                    ]),
+                ),
+            ),
+        );
+
+        $openApi->getPaths()->addPath('/security/api/v1/token/refresh', $pathItem);
 
         return $openApi;
     }

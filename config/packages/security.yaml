@@ -19,6 +19,9 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api_token_refresh:
+            pattern: ^security/api/v1/token/refresh$
+            stateless: true
         login:
             provider: app_user_provider
             pattern: ^/security/api/v1/login$
