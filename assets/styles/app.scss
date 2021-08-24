@@ -1,6 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 @import 'variables';
 
+@font-face {
+  font-family: 'Galderglynn';
+  src: url('../fonts/galderglynn\ titling\ bl.ttf');
+}
+
 @import 'home';
 @import 'login';
 @import 'register';
@@ -14,4 +19,8 @@ body {
   font-family: 'Quicksand';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  h1 {
+    font-family: 'Galderglynn' !important;
+  }
 }

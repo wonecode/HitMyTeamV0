@@ -5,6 +5,10 @@
     align-items: center;
   }
 
+  .MuiFormControl-root {
+    width: 100%;
+  }
+
   button {
     padding: 14px 22px;
   }
@@ -43,6 +47,15 @@
       margin-top: 16px;
     }
 
+    .return-hmt {
+      margin-bottom: 16px !important;
+    }
+
+    button,
+      a {
+        padding: 14px 22px;
+      }
+
     .buttons {
       margin-top: 32px;
       display: flex;
@@ -73,7 +86,11 @@
       flex-direction: column;
       margin-bottom: 24px;
 
-      .username {
+      .form-error {
+        margin-bottom: 16px;
+      }
+
+      .email {
         margin-bottom: 24px;
       }
 
