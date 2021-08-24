@@ -22,7 +22,9 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-const RIOT_TOKEN = process.env.RIOT_TOKEN; 
+const RIOT_TOKEN = process.env.RIOT_TOKEN;
+import Cookies from 'universal-cookie';
+import { Redirect } from 'react-router-dom';
 
 const riotHeader = {
   'User-Agent':
@@ -106,6 +108,7 @@ export default function Profile() {
   const [copyCode, setCopyCode] = React.useState(false);
   const steps = getSteps();
   const { enqueueSnackbar } = useSnackbar();
+  const cookies = new Cookies();
 
   const handleClickOpen = () => {
     setOpenSettings(true);
@@ -139,7 +142,7 @@ export default function Profile() {
 
     if (summonerName == '') {
       setSummonerNameError(true);
-      setSummonerNameErrorText('Ce champ de doit pas être vide');
+      setSummonerNameErrorText('Ce champ ne doit pas être vide');
     }
 
     if (summonerName) {
@@ -368,210 +371,236 @@ export default function Profile() {
 
   return (
     <main className='profile'>
-      <Helmet>
-        <title>{summonerName !== '' ? summonerName : 'Profil'} | HitMyTeam</title>
-      </Helmet>
-      <div className='header'>
-        <div className='header-content'>
-          {profileIcon !== '' ? (
-            <Avatar src={profileIcon} className='avatar' />
-          ) : (
-            <Skeleton variant='circle' width={100} height={100} />
-          )}
-          <div>
-            <Typography variant='h4' component='h1' gutterBottom>
-              {isVerified === true ? summonerData.name : <Skeleton />}
-            </Typography>
-            <Chip size='small' label='Looking for team' color='primary' />
-          </div>
-        </div>
-        {isVerified === false ? (
-          <Button color='primary' variant='contained' onClick={handleClickOpen}>
-            Initialiser le profil
-          </Button>
-        ) : (
-          <Tooltip title='Rafraîchir le profil' aria-label='refresh-profile' placement='top' arrow>
-            <Button variant='contained' color='primary' onClick={getLeagueData}>
-              <RefreshIcon />
-            </Button>
-          </Tooltip>
-        )}
-      </div>
-      <Grid container className='content' spacing={3}>
-        <Grid item elevation={3} lg={3} md={6} xs={12}>
-          <Paper className='player-rank'>
-            {leagueRankIcon !== '' ? (
-              <img src={leagueRankIcon} alt='player-rank-icon' />
-            ) : (
-              <Skeleton variant='circle' width={150} height={150} />
-            )}
-            <div>
-              {playerTier !== '' ? (
-                <Typography color='primary' variant='h6' className='player-ranktier' component='h2'>
-                  {`${playerTier} ${playerRank}`}
-                </Typography>
-              ) : (
-                <Skeleton width={150} height={40} />
-              )}
-              {playerLeaguepoints !== '' && playerHotstreak !== '' ? (
-                <Typography variant='body1' className='player-leaguepoints' component='p'>
-                  {`${playerLeaguepoints} LP `}
-                  <Tooltip title='Série de victoires' aria-label='hotStreak' placement='top' arrow>
-                    <span>{playerHotstreak === true ? '🔥' : '❄️'}</span>
-                  </Tooltip>
-                </Typography>
-              ) : (
-                <Skeleton width={150} height={30} />
-              )}
-              <Typography variant='body2' className='player-winrate' component='p'>
-                {playerWinrate !== '' && playerWins !== '' && playerLosses !== '' ? (
-                  [playerWins, 'V', '/', playerLosses, 'D', ' (', playerWinrate, ')']
-                ) : (
-                  <Skeleton width={150} height={20} />
-                )}
-              </Typography>
-              {isVerified === true ? (
-                <Button
-                  href={playerOpgg}
-                  target='_blank'
-                  size='small'
-                  className='player-opgg'
-                  color='secondary'
-                  variant='contained'
-                >
-                  OPGG
-                </Button>
-              ) : (
-                <Skeleton variant='rect' width={60} height={30} />
-              )}
-            </div>
-          </Paper>
-          <div className='player-spec'>
-            <Paper className='player-role'>
-              <div className='main-role-content'>
-                {playerMainRole !== '' ? (
-                  <img src={playerMainRoleImg} alt='player-rank' />
-                ) : (
-                  <Skeleton variant='circle' width={35} height={35} />
-                )}
-                {playerMainRole !== '' ? (
-                  <Typography variant='h6'>{playerMainRole}</Typography>
-                ) : (
-                  <Skeleton width={100} height={35} />
-                )}
-              </div>
-            </Paper>
-            <Paper className='player-champions'>
-              {playerMainChamp !== '' ? (
-                <Tooltip title={playerMainChamp} aria-label='champion-1' placement='top' arrow>
-                  <img
-                    src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/${playerMainChamp}.png`}
-                    alt='player-rank'
-                  />
-                </Tooltip>
-              ) : (
-                <Skeleton variant='circle' width={35} height={35} />
-              )}
-              {playerSecondChamp !== '' ? (
-                <Tooltip title={playerSecondChamp} aria-label='champion-2' placement='top' arrow>
-                  <img
-                    src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/${playerSecondChamp}.png`}
-                    alt='player-rank'
-                  />
-                </Tooltip>
-              ) : (
-                <Skeleton variant='circle' width={35} height={35} />
-              )}
-              {playerThirdChamp !== '' ? (
-                <Tooltip title={playerThirdChamp} aria-label='champion-3' placement='top' arrow>
-                  <img
-                    src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/${playerThirdChamp}.png`}
-                    alt='player-rank'
-                  />
-                </Tooltip>
-              ) : (
-                <Skeleton variant='circle' width={35} height={35} />
-              )}
-            </Paper>
-          </div>
-        </Grid>
-      </Grid>
-
-      <Dialog open={openSettings} onClose={handleClose} aria-labelledby='form-dialog-title'>
-        <DialogTitle id='form-dialog-title'>
-          Liez votre compte HitMyTeam avec Riot Games
-        </DialogTitle>
-        <Stepper activeStep={activeStep} alternativeLabel>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+      {!cookies.get('HitMyTeam') ? (
+        <Redirect to='/connexion' />
+      ) : (
         <div>
-          {activeStep === steps.length ? (
-            <div>
-              <DialogContent>
-                <Typography>Votre profil League of Legends est complet !</Typography>
-              </DialogContent>
+          <Helmet>
+            <title>{summonerName !== '' ? summonerName : 'Profil'} | HitMyTeam</title>
+          </Helmet>
+          <div className='header'>
+            <div className='header-content'>
+              {profileIcon !== '' ? (
+                <Avatar src={profileIcon} className='avatar' />
+              ) : (
+                <Skeleton variant='circle' width={100} height={100} />
+              )}
+              <div>
+                <Typography variant='h4' component='h1' gutterBottom>
+                  {isVerified === true ? summonerData.name : <Skeleton />}
+                </Typography>
+                <Chip size='small' label='Looking for team' color='primary' />
+              </div>
             </div>
-          ) : (
-            <div>
-              <DialogContent>
-                <DialogContentText>{getStepContent(activeStep)}</DialogContentText>
-              </DialogContent>
-            </div>
-          )}
-        </div>
-        <DialogContent className='main-content-dialog'>
-          <form noValidate autoComplete='off' onSubmit={handleSubmit} id={hideFormSummoner}>
-            <div className='init-summoner'>
-              <TextField
-                onChange={(e) => setSummonerName(e.target.value)}
-                autoFocus
-                label="Nom d'invocateur"
-                type='text'
-                fullWidth
-                error={summonerNameError}
-                required
-              />
-              <Button type='submit' color='primary' variant='contained' size='small'>
-                <CheckCircleIcon />
+            {isVerified === false ? (
+              <Button color='primary' variant='contained' onClick={handleClickOpen}>
+                Initialiser le profil
               </Button>
-            </div>
-            <Typography variant='body2' component='p' color='error'>
-              {summonerNameErrorText}
-            </Typography>
-          </form>
-          <Typography variant='body2' component='p' color='primary'>
-            {copyCode === true ? 'Code copié !' : ''}
-          </Typography>
-          <div className='uuid-code' id={hideCodeVerification}>
-            <CopyToClipboard text={uuid}>
-              <Typography onClick={codePaste} className='code' color='primary'>
-                {uuid}
-                <button className='copy' aria-label='copy-to-clipboard'>
-                  <FileCopyIcon fontSize='small' />
-                </button>
-              </Typography>
-            </CopyToClipboard>
-            <Button size='small' variant='contained' onClick={verifySummoner}>
-              Vérifier
-            </Button>
+            ) : (
+              <Tooltip
+                title='Rafraîchir le profil'
+                aria-label='refresh-profile'
+                placement='top'
+                arrow
+              >
+                <Button variant='contained' color='primary' onClick={getLeagueData}>
+                  <RefreshIcon />
+                </Button>
+              </Tooltip>
+            )}
           </div>
-          <Typography variant='body2' component='p' color='error'>
-            {verifySummonerErrorText}
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleReset} color='primary'>
-            Annuler
-          </Button>
-          <Button onClick={handleClose} color='primary'>
-            Enregistrer
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <Grid container className='content' spacing={3}>
+            <Grid item elevation={3} lg={3} md={6} xs={12}>
+              <Paper className='player-rank'>
+                {leagueRankIcon !== '' ? (
+                  <img src={leagueRankIcon} alt='player-rank-icon' />
+                ) : (
+                  <Skeleton variant='circle' width={150} height={150} />
+                )}
+                <div>
+                  {playerTier !== '' ? (
+                    <Typography
+                      color='primary'
+                      variant='h6'
+                      className='player-ranktier'
+                      component='h2'
+                    >
+                      {`${playerTier} ${playerRank}`}
+                    </Typography>
+                  ) : (
+                    <Skeleton width={150} height={40} />
+                  )}
+                  {playerLeaguepoints !== '' && playerHotstreak !== '' ? (
+                    <Typography variant='body1' className='player-leaguepoints' component='p'>
+                      {`${playerLeaguepoints} LP `}
+                      <Tooltip
+                        title='Série de victoires'
+                        aria-label='hotStreak'
+                        placement='top'
+                        arrow
+                      >
+                        <span>{playerHotstreak === true ? '🔥' : '❄️'}</span>
+                      </Tooltip>
+                    </Typography>
+                  ) : (
+                    <Skeleton width={150} height={30} />
+                  )}
+                  <Typography variant='body2' className='player-winrate' component='p'>
+                    {playerWinrate !== '' && playerWins !== '' && playerLosses !== '' ? (
+                      [playerWins, 'V', '/', playerLosses, 'D', ' (', playerWinrate, ')']
+                    ) : (
+                      <Skeleton width={150} height={20} />
+                    )}
+                  </Typography>
+                  {isVerified === true ? (
+                    <Button
+                      href={playerOpgg}
+                      target='_blank'
+                      size='small'
+                      className='player-opgg'
+                      color='secondary'
+                      variant='contained'
+                    >
+                      OPGG
+                    </Button>
+                  ) : (
+                    <Skeleton variant='rect' width={60} height={30} />
+                  )}
+                </div>
+              </Paper>
+              <div className='player-spec'>
+                <Paper className='player-role'>
+                  <div className='main-role-content'>
+                    {playerMainRole !== '' ? (
+                      <img src={playerMainRoleImg} alt='player-rank' />
+                    ) : (
+                      <Skeleton variant='circle' width={35} height={35} />
+                    )}
+                    {playerMainRole !== '' ? (
+                      <Typography variant='h6'>{playerMainRole}</Typography>
+                    ) : (
+                      <Skeleton width={100} height={35} />
+                    )}
+                  </div>
+                </Paper>
+                <Paper className='player-champions'>
+                  {playerMainChamp !== '' ? (
+                    <Tooltip title={playerMainChamp} aria-label='champion-1' placement='top' arrow>
+                      <img
+                        src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/${playerMainChamp}.png`}
+                        alt='player-rank'
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Skeleton variant='circle' width={35} height={35} />
+                  )}
+                  {playerSecondChamp !== '' ? (
+                    <Tooltip
+                      title={playerSecondChamp}
+                      aria-label='champion-2'
+                      placement='top'
+                      arrow
+                    >
+                      <img
+                        src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/${playerSecondChamp}.png`}
+                        alt='player-rank'
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Skeleton variant='circle' width={35} height={35} />
+                  )}
+                  {playerThirdChamp !== '' ? (
+                    <Tooltip title={playerThirdChamp} aria-label='champion-3' placement='top' arrow>
+                      <img
+                        src={`http://ddragon.leagueoflegends.com/cdn/11.16.1/img/champion/${playerThirdChamp}.png`}
+                        alt='player-rank'
+                      />
+                    </Tooltip>
+                  ) : (
+                    <Skeleton variant='circle' width={35} height={35} />
+                  )}
+                </Paper>
+              </div>
+            </Grid>
+          </Grid>
+
+          <Dialog open={openSettings} onClose={handleClose} aria-labelledby='form-dialog-title'>
+            <DialogTitle id='form-dialog-title'>
+              Liez votre compte HitMyTeam avec Riot Games
+            </DialogTitle>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <div>
+              {activeStep === steps.length ? (
+                <div>
+                  <DialogContent>
+                    <Typography>Votre profil League of Legends est complet !</Typography>
+                  </DialogContent>
+                </div>
+              ) : (
+                <div>
+                  <DialogContent>
+                    <DialogContentText>{getStepContent(activeStep)}</DialogContentText>
+                  </DialogContent>
+                </div>
+              )}
+            </div>
+            <DialogContent className='main-content-dialog'>
+              <form noValidate autoComplete='off' onSubmit={handleSubmit} id={hideFormSummoner}>
+                <div className='init-summoner'>
+                  <TextField
+                    onChange={(e) => setSummonerName(e.target.value)}
+                    autoFocus
+                    label="Nom d'invocateur"
+                    type='text'
+                    fullWidth
+                    error={summonerNameError}
+                    required
+                  />
+                  <Button type='submit' color='primary' variant='contained' size='small'>
+                    <CheckCircleIcon />
+                  </Button>
+                </div>
+                <Typography variant='body2' component='p' color='error'>
+                  {summonerNameErrorText}
+                </Typography>
+              </form>
+              <Typography variant='body2' component='p' color='primary'>
+                {copyCode === true ? 'Code copié !' : ''}
+              </Typography>
+              <div className='uuid-code' id={hideCodeVerification}>
+                <CopyToClipboard text={uuid}>
+                  <Typography onClick={codePaste} className='code' color='primary'>
+                    {uuid}
+                    <button className='copy' aria-label='copy-to-clipboard'>
+                      <FileCopyIcon fontSize='small' />
+                    </button>
+                  </Typography>
+                </CopyToClipboard>
+                <Button size='small' variant='contained' onClick={verifySummoner}>
+                  Vérifier
+                </Button>
+              </div>
+              <Typography variant='body2' component='p' color='error'>
+                {verifySummonerErrorText}
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleReset} color='primary'>
+                Annuler
+              </Button>
+              <Button onClick={handleClose} color='primary'>
+                Enregistrer
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      )}
     </main>
   );
 }
