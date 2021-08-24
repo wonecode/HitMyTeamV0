@@ -11,7 +11,9 @@ use ArrayObject;
 
 class OpenApiFactory implements OpenApiFactoryInterface
 {
-    public function __construct(private OpenApiFactoryInterface $decorated){}
+    public function __construct(private OpenApiFactoryInterface $decorated)
+    {
+    }
 
     public function __invoke(array $context = []): OpenApi
     {
@@ -89,6 +91,39 @@ class OpenApiFactory implements OpenApiFactoryInterface
         );
 
         $openApi->getPaths()->addPath('/security/api/v1/login', $pathItem);
+
+        $schemas['RefreshToken'] = new ArrayObject([
+            'type' => 'object',
+            'properties' => [
+                'refresh_token' => [
+                    'type' => 'string',
+                    'readOnly' => true,
+                ]
+            ]
+        ]);
+
+        $pathItem = new PathItem(
+            ref: 'JWT Refresh Token',
+            post: new Operation(
+                operationId: 'refreshPostCredentialsItem',
+                tags: ['Token'],
+                responses: [
+                    '200' => [
+                        'description' => 'Get JWT token and refresh Token',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    '$ref' => '#/components/schemas/RefreshToken',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                summary: 'Get JWT refresh token.'
+            ),
+        );
+
+        $openApi->getPaths()->addPath('/security/api/v1/token/refresh', $pathItem);
 
         return $openApi;
     }
