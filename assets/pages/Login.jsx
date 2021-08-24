@@ -92,6 +92,7 @@ export default function Login() {
           accept: 'application/json',
         },
         body: JSON.stringify({ username: email, password: password }),
+        credentials: 'include',
       });
 
       if (loginResponse.status === 200) {
@@ -113,6 +114,13 @@ export default function Login() {
         setLoading(false);
       } else if (loginResponse.status === 401) {
         setCredentialsErrorText("L'email ou le mot de passe est invalide");
+        setEmailError(true);
+        setPasswordError(true);
+        setLoading(false);
+      } else if (loginResponse.status === 500) {
+        setCredentialsErrorText(
+          'Une erreur avec le serveur est survenue, réessayez dans quelques instants'
+        );
         setEmailError(true);
         setPasswordError(true);
         setLoading(false);
@@ -199,7 +207,9 @@ export default function Login() {
                   control={<Checkbox name='stay-logged' color='primary' />}
                   label='Rester connecté'
                 />
-                <Link className='pass-forgot'>Mot de passe oublié ?</Link>
+                <Link to='/#' className='pass-forgot'>
+                  Mot de passe oublié ?
+                </Link>
               </div>
               <Button
                 className={buttonClassname}
