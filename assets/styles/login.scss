@@ -52,9 +52,9 @@
     }
 
     button,
-      a {
-        padding: 14px 22px;
-      }
+    a {
+      padding: 14px 22px;
+    }
 
     .buttons {
       margin-top: 32px;
@@ -95,16 +95,15 @@
       }
 
       .form-footer {
+        margin-top: 24px;
+        margin-bottom: 56px;
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 16px;
-        margin-bottom: 40px;
+        justify-content: flex-end;
 
         .pass-forgot {
           color: $primary;
           text-decoration: underline;
+          padding: 0;
         }
       }
     }
