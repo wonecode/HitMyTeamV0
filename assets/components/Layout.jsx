@@ -1,30 +1,26 @@
 import React from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Avatar from '@material-ui/core/Avatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../styles/layout.scss';
-import logoTypo from '../images/logo/logo-typo-white.png';
 import logoSymbole from '../images/logo/logo-symbole-typo-yellow.png';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import HelpIcon from '@material-ui/icons/Help';
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,59 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
-  },
-  avatar: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap',
   },
-  drawerOpen: {
+  drawerPaper: {
     width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
-    },
-  },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: theme.spacing(1, 1, 1, 2),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
   },
   active: {
     color: '#ffd736',
@@ -96,9 +46,9 @@ const useStyles = makeStyles((theme) => ({
   activeIcon: {
     color: '#ffd736',
   },
-  toolbarUser: {
-    display: 'flex',
-    alignItems: 'center',
+  drawerContainer: {
+    overflow: 'auto',
+    padding: '16px'
   },
   content: {
     flexGrow: 1,
@@ -108,18 +58,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Layout({ children }) {
   const classes = useStyles();
-  const theme = useTheme();
-  const [openAppbar, setOpenAppbar] = React.useState(false);
   const history = useHistory();
   const location = useLocation();
-
-  const handleDrawerOpen = () => {
-    setOpenAppbar(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpenAppbar(false);
-  };
 
   const mainMenuItems = [
     {
@@ -141,79 +81,94 @@ export default function Layout({ children }) {
     },
   ];
 
+  const thirdMenuItems = [
+    {
+      text: 'Nouveautés',
+      icon: <NewReleasesIcon />,
+      path: '/nouveautes',
+    },
+    {
+      text: 'FAQ',
+      icon: <HelpIcon />,
+      path: '/faq',
+    },
+  ];
+
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar
-        position='fixed'
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: openAppbar,
-        })}
-      >
+      <AppBar position='fixed' className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            onClick={handleDrawerOpen}
-            edge='start'
-            className={clsx(classes.menuButton, {
-              [classes.hide]: openAppbar,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
           <div className='nav-text'>
             {mainMenuItems.map((item) => (
-              <img src={logoTypo} alt='hitmyteam' className='logo-typo' />
+              <img src={logoSymbole} alt='hitmyteam' className='logo-typo' />
             ))}
             <Avatar className={classes.avatar}></Avatar>
           </div>
         </Toolbar>
       </AppBar>
       <Drawer
+        className={classes.drawer}
         variant='permanent'
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: openAppbar,
-          [classes.drawerClose]: !openAppbar,
-        })}
         classes={{
-          paper: clsx({
-            [classes.drawerOpen]: openAppbar,
-            [classes.drawerClose]: !openAppbar,
-          }),
+          paper: classes.drawerPaper,
         }}
       >
-        <div className={classes.toolbar}>
-          <img src={logoSymbole} alt='logo-hitmyteam' className='logo-hmt' />
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
+        <Toolbar />
+        <div className={classes.drawerContainer}>
+          <div className='drawer-header'>
+            <Avatar className={classes.avatar}></Avatar>
+            <div>
+              <Typography className='username'>WONEZER</Typography>
+              <Typography className='status' color='primary'>
+                Player
+              </Typography>
+            </div>
+          </div>
+          <Divider />
+          <Typography className='first-title title-links' variant='h6'>
+            GENERAL
+          </Typography>
+          <List className='links-buttons'>
+            {mainMenuItems.map((item) => (
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => history.push(item.path)}
+                className={location.pathname == item.path ? classes.active : null}
+              >
+                <ListItemIcon
+                  className={location.pathname == item.path ? classes.activeIcon : null}
+                >
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+          <Typography className='title-links' variant='h6'>
+            COMPTE
+          </Typography>
+          <List className='links-buttons'>
+            {secondMenuItems.map((item) => (
+              <ListItem button key={item.text}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
+          <Typography className='title-links' variant='h6'>
+            HITMYTEAM
+          </Typography>
+          <List className='links-buttons'>
+            {thirdMenuItems.map((item) => (
+              <ListItem button key={item.text}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            ))}
+          </List>
         </div>
-        <Divider />
-        <List>
-          {mainMenuItems.map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => history.push(item.path)}
-              className={location.pathname == item.path ? classes.active : null}
-            >
-              <ListItemIcon className={location.pathname == item.path ? classes.activeIcon : null}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {secondMenuItems.map((item) => (
-            <ListItem button key={item.text}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
 
       <div className={classes.page}>

@@ -1,7 +1,11 @@
 @import 'variables';
 
 .logo-hmt {
-    width: 140px;
+  width: 130px;
+}
+
+.title-links {
+  font-size: 14px !important;
 }
 
 .MuiToolbar-regular {
@@ -20,11 +24,53 @@
   }
 }
 
-.MuiTypography-h6 {
-  .MuiSvgIcon-root {
-    vertical-align: middle;
-    margin-right: 8px;
+.links-buttons {
+  margin-bottom: 24px !important;
+
+  .MuiButtonBase-root {
+    border-radius: 8px;
+
+    .MuiListItemIcon-root {
+      min-width: 0;
+      padding-right: 8px;
+    }
+
+    span {
+      font-size: 14px !important;
+      font-weight: 600 !important;
+    }
   }
+
+  .MuiListItem-gutters {
+    padding-left: 8px !important;
+  }
+}
+
+.drawer-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+  background-color: $dark;
+  border-radius: 8px;
+  margin-bottom: 16px;
+
+  .MuiAvatar-root {
+    margin-right: 16px;
+  }
+
+  .username {
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  .status {
+    font-size: 13px;
+  }
+}
+
+.first-title {
+  margin-top: 16px !important;
 }
 
 .MuiListItemIcon-root {

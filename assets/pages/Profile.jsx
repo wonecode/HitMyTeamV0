@@ -415,7 +415,7 @@ export default function Profile() {
                 {leagueRankIcon !== '' ? (
                   <img src={leagueRankIcon} alt='player-rank-icon' />
                 ) : (
-                  <Skeleton variant='circle' width={150} height={150} />
+                  <Skeleton variant='rect' width={110} height={150} />
                 )}
                 <div>
                   {playerTier !== '' ? (
@@ -428,7 +428,7 @@ export default function Profile() {
                       {`${playerTier} ${playerRank}`}
                     </Typography>
                   ) : (
-                    <Skeleton width={150} height={40} />
+                    <Skeleton width={120} height={40} />
                   )}
                   {playerLeaguepoints !== '' && playerHotstreak !== '' ? (
                     <Typography variant='body1' className='player-leaguepoints' component='p'>
@@ -443,7 +443,7 @@ export default function Profile() {
                       </Tooltip>
                     </Typography>
                   ) : (
-                    <Skeleton width={150} height={30} />
+                    <Skeleton width={100} height={30} />
                   )}
                   <Typography variant='body2' className='player-winrate' component='p'>
                     {playerWinrate !== '' && playerWins !== '' && playerLosses !== '' ? (
