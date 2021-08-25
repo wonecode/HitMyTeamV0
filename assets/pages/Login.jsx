@@ -98,8 +98,7 @@ export default function Login() {
       if (loginResponse.status === 200) {
         const tokenData = await loginResponse.json();
 
-        cookies.set('HitMyTeam', tokenData.token, { maxAge: 3600 });
-        cookies.get('HitMyTeam');
+        cookies.set('HitMyTeam', tokenData.token, { maxAge: 3600, secure: true });
 
         enqueueSnackbar(`Re bonjour ${email} !`, {
           variant: 'success',
@@ -203,13 +202,7 @@ export default function Login() {
                 </Typography>
               </div>
               <div className='form-footer'>
-                <FormControlLabel
-                  control={<Checkbox name='stay-logged' color='primary' />}
-                  label='Rester connecté'
-                />
-                <Link to='/#' className='pass-forgot'>
-                  Mot de passe oublié ?
-                </Link>
+                <Link className='pass-forgot'>Mot de passe oublié ?</Link>
               </div>
               <Button
                 className={buttonClassname}
