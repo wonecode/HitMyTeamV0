@@ -11,6 +11,9 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -74,6 +77,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
         ]
     ]
 )]
+#[UniqueEntity('email')]
+#[UniqueEntity('username')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
     /**
@@ -101,6 +106,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      * @ORM\Column(type="string")
      */
     #[Groups(['post:user:item'])]
+    #[
+        Length(min: 12),
+        Regex(pattern: '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])$/', message: "Le mot de passe doit contenir au minimum un chiffre, une majuscule, une minuscule et un caractère spécial.")
+    ]
     private $password;
 
     /**
