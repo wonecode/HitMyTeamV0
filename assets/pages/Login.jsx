@@ -85,7 +85,7 @@ export default function Login() {
     }
 
     if (email && password) {
-      const loginResponse = await fetch('http://localhost:8000/security/api/v1/login', {
+      const loginResponse = await fetch('/security/api/v1/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

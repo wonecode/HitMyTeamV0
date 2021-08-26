@@ -5,6 +5,10 @@
     align-items: center;
   }
 
+  .MuiFormControl-root {
+    width: 100%;
+  }
+
   button {
     padding: 14px 22px;
   }
@@ -13,9 +17,9 @@
     height: 93vh;
 
     img {
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
     }
 
     @media screen and (max-width: 425px) {
@@ -72,12 +76,12 @@
       flex-direction: column;
       margin-bottom: 24px;
 
-      div {
-        margin-bottom: 10px;
+      .form-group {
+        margin-bottom: 24px;
       }
 
-      .password {
-          margin-bottom: 40px;
+      .password-error {
+          margin-bottom: 8px;
       }
     }
 

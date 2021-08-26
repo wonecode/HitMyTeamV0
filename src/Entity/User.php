@@ -93,6 +93,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      * @ORM\Column(type="string", length=180, unique=true)
      */
     #[Groups(['read:user:collection', 'put:user:item', 'post:user:item', 'read:user:me'])]
+    #[Email]
     private $email;
 
     /**
@@ -108,7 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     #[Groups(['post:user:item'])]
     #[
         Length(min: 12),
-        Regex(pattern: '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])$/', message: "Le mot de passe doit contenir au minimum un chiffre, une majuscule, une minuscule et un caractère spécial.")
+        Regex(pattern: '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])$/', message: "^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[#?!@$%^&*-])$")
     ]
     private $password;
 
