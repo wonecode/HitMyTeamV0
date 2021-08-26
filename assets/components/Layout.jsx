@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,6 +19,10 @@ import '../styles/layout.scss';
 import logoSymbole from '../images/logo/logo-symbole-typo-yellow.png';
 import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import HelpIcon from '@material-ui/icons/Help';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import PageviewIcon from '@material-ui/icons/Pageview';
+import { Hidden, IconButton } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const drawerWidth = 270;
 
@@ -30,25 +34,35 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
+    [theme.breakpoints.up('md')]: {
+      zIndex: theme.zIndex.drawer + 1,
+    },
   },
   drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
+    [theme.breakpoints.up('md')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
   drawerPaper: {
     width: drawerWidth,
   },
   active: {
     color: '#ffd736',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#202124',
   },
   activeIcon: {
     color: '#ffd736',
   },
   drawerContainer: {
     overflow: 'auto',
-    padding: '16px'
+    padding: '16px',
   },
   content: {
     flexGrow: 1,
@@ -60,16 +74,33 @@ export default function Layout({ children }) {
   const classes = useStyles();
   const history = useHistory();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { window } = children;
+  const theme = useTheme();
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
 
   const mainMenuItems = [
+    {
+      text: 'Trouves ton équipe',
+      icon: <PageviewIcon />,
+      path: '/hityourteam',
+    },
+    {
+      text: 'Classement',
+      icon: <AssessmentIcon />,
+      path: '/classement',
+    },
+  ];
+
+  const secondMenuItems = [
     {
       text: 'Profil',
       icon: <AccountBoxIcon />,
       path: '/profil',
     },
-  ];
-
-  const secondMenuItems = [
     {
       text: 'Paramètres',
       icon: <SettingsIcon />,
@@ -94,82 +125,140 @@ export default function Layout({ children }) {
     },
   ];
 
+  const drawer = (
+    <Drawer
+      className={classes.drawer}
+      variant='permanent'
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+    >
+      <Toolbar />
+      <div className={classes.drawerContainer}>
+        <div className='drawer-header'>
+          <Avatar className={classes.avatar}></Avatar>
+          <div>
+            <Typography className='username'>WONEZER</Typography>
+            <Typography className='status' color='primary'>
+              Player
+            </Typography>
+          </div>
+        </div>
+        <Divider />
+        <Typography className='first-title title-links' variant='h6'>
+          GENERAL
+        </Typography>
+        <List className='links-buttons'>
+          {mainMenuItems.map((item) => (
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => history.push(item.path)}
+              className={location.pathname == item.path ? classes.active : null}
+            >
+              <ListItemIcon className={location.pathname == item.path ? classes.activeIcon : null}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+        <Typography className='title-links' variant='h6'>
+          COMPTE
+        </Typography>
+        <List className='links-buttons'>
+          {secondMenuItems.map((item) => (
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => history.push(item.path)}
+              className={location.pathname == item.path ? classes.active : null}
+            >
+              <ListItemIcon className={location.pathname == item.path ? classes.activeIcon : null}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+        <Typography className='title-links' variant='h6'>
+          HITMYTEAM
+        </Typography>
+        <List className='links-buttons'>
+          {thirdMenuItems.map((item) => (
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => history.push(item.path)}
+              className={location.pathname == item.path ? classes.active : null}
+            >
+              <ListItemIcon className={location.pathname == item.path ? classes.activeIcon : null}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <div className='layout-footer'>
+          <Typography variant='body1'>© 2021 HitMyTeam</Typography>
+        </div>
+      </div>
+    </Drawer>
+  );
+
+  const container = window !== undefined ? () => window().document.body : undefined;
+
   return (
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position='fixed' className={classes.appBar}>
         <Toolbar>
+          <IconButton
+            color='inherit'
+            aria-label='open drawer'
+            edge='start'
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
           <div className='nav-text'>
-            {mainMenuItems.map((item) => (
-              <img src={logoSymbole} alt='hitmyteam' className='logo-typo' />
-            ))}
+            <img src={logoSymbole} alt='hitmyteam' className='logo-typo' />
             <Avatar className={classes.avatar}></Avatar>
           </div>
         </Toolbar>
       </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant='permanent'
-        classes={{
-          paper: classes.drawerPaper,
-        }}
-      >
-        <Toolbar />
-        <div className={classes.drawerContainer}>
-          <div className='drawer-header'>
-            <Avatar className={classes.avatar}></Avatar>
-            <div>
-              <Typography className='username'>WONEZER</Typography>
-              <Typography className='status' color='primary'>
-                Player
-              </Typography>
-            </div>
-          </div>
-          <Divider />
-          <Typography className='first-title title-links' variant='h6'>
-            GENERAL
-          </Typography>
-          <List className='links-buttons'>
-            {mainMenuItems.map((item) => (
-              <ListItem
-                button
-                key={item.text}
-                onClick={() => history.push(item.path)}
-                className={location.pathname == item.path ? classes.active : null}
-              >
-                <ListItemIcon
-                  className={location.pathname == item.path ? classes.activeIcon : null}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List>
-          <Typography className='title-links' variant='h6'>
-            COMPTE
-          </Typography>
-          <List className='links-buttons'>
-            {secondMenuItems.map((item) => (
-              <ListItem button key={item.text}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List>
-          <Typography className='title-links' variant='h6'>
-            HITMYTEAM
-          </Typography>
-          <List className='links-buttons'>
-            {thirdMenuItems.map((item) => (
-              <ListItem button key={item.text}>
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
-              </ListItem>
-            ))}
-          </List>
-        </div>
-      </Drawer>
+      <nav className={classes.drawer} aria-label='mailbox folders'>
+        <Hidden mdUp implementation='css'>
+          <Drawer
+            container={container}
+            variant='temporary'
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden smDown implementation='css'>
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant='permanent'
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
 
       <div className={classes.page}>
         <div className={classes.toolbar}></div>

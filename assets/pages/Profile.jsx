@@ -415,7 +415,7 @@ export default function Profile() {
                 {leagueRankIcon !== '' ? (
                   <img src={leagueRankIcon} alt='player-rank-icon' />
                 ) : (
-                  <Skeleton variant='rect' width={110} height={150} />
+                  <Skeleton variant='circle' width={150} height={150} />
                 )}
                 <div>
                   {playerTier !== '' ? (
