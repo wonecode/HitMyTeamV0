@@ -93,6 +93,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      * @ORM\Column(type="string", length=180, unique=true)
      */
     #[Groups(['read:user:collection', 'put:user:item', 'post:user:item', 'read:user:me'])]
+    #[Email]
     private $email;
 
     /**
