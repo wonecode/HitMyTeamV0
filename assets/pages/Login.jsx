@@ -98,7 +98,7 @@ export default function Login() {
       if (loginResponse.status === 200) {
         const tokenData = await loginResponse.json();
 
-        cookies.set('HitMyTeam', tokenData.token, { maxAge: 3600, secure: true });
+        cookies.set('HitMyTeam', tokenData.token, { maxAge: 86400, secure: true });
 
         enqueueSnackbar(`Re bonjour ${email} !`, {
           variant: 'success',

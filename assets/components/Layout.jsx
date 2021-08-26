@@ -1,30 +1,30 @@
 import React from 'react';
-import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Avatar from '@material-ui/core/Avatar';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../styles/layout.scss';
-import logoTypo from '../images/logo/logo-typo-white.png';
 import logoSymbole from '../images/logo/logo-symbole-typo-yellow.png';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
+import HelpIcon from '@material-ui/icons/Help';
+import AssessmentIcon from '@material-ui/icons/Assessment';
+import PageviewIcon from '@material-ui/icons/Pageview';
+import { Hidden, IconButton } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
 
-const drawerWidth = 240;
+const drawerWidth = 270;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,71 +34,35 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  hide: {
-    display: 'none',
-  },
-  avatar: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
-  },
-  drawer: {
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-  },
-  drawerOpen: {
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerClose: {
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+    [theme.breakpoints.up('md')]: {
+      zIndex: theme.zIndex.drawer + 1,
     },
   },
-  toolbar: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: theme.spacing(1, 1, 1, 2),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
+  drawer: {
+    [theme.breakpoints.up('md')]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  },
+  drawerPaper: {
+    width: drawerWidth,
   },
   active: {
     color: '#ffd736',
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    backgroundColor: '#202124',
   },
   activeIcon: {
     color: '#ffd736',
   },
-  toolbarUser: {
-    display: 'flex',
-    alignItems: 'center',
+  drawerContainer: {
+    overflow: 'auto',
+    padding: '16px',
   },
   content: {
     flexGrow: 1,
@@ -108,28 +72,35 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Layout({ children }) {
   const classes = useStyles();
-  const theme = useTheme();
-  const [openAppbar, setOpenAppbar] = React.useState(false);
   const history = useHistory();
   const location = useLocation();
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const { window } = children;
+  const theme = useTheme();
 
-  const handleDrawerOpen = () => {
-    setOpenAppbar(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpenAppbar(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
   const mainMenuItems = [
+    {
+      text: 'Trouves ton équipe',
+      icon: <PageviewIcon />,
+      path: '/hityourteam',
+    },
+    {
+      text: 'Classement',
+      icon: <AssessmentIcon />,
+      path: '/classement',
+    },
+  ];
+
+  const secondMenuItems = [
     {
       text: 'Profil',
       icon: <AccountBoxIcon />,
       path: '/profil',
     },
-  ];
-
-  const secondMenuItems = [
     {
       text: 'Paramètres',
       icon: <SettingsIcon />,
@@ -141,56 +112,43 @@ export default function Layout({ children }) {
     },
   ];
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position='fixed'
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: openAppbar,
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            onClick={handleDrawerOpen}
-            edge='start'
-            className={clsx(classes.menuButton, {
-              [classes.hide]: openAppbar,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <div className='nav-text'>
-            {mainMenuItems.map((item) => (
-              <img src={logoTypo} alt='hitmyteam' className='logo-typo' />
-            ))}
-            <Avatar className={classes.avatar}></Avatar>
+  const thirdMenuItems = [
+    {
+      text: 'Nouveautés',
+      icon: <NewReleasesIcon />,
+      path: '/nouveautes',
+    },
+    {
+      text: 'FAQ',
+      icon: <HelpIcon />,
+      path: '/faq',
+    },
+  ];
+
+  const drawer = (
+    <Drawer
+      className={classes.drawer}
+      variant='permanent'
+      classes={{
+        paper: classes.drawerPaper,
+      }}
+    >
+      <Toolbar />
+      <div className={classes.drawerContainer}>
+        <div className='drawer-header'>
+          <Avatar className={classes.avatar}></Avatar>
+          <div>
+            <Typography className='username'>WONEZER</Typography>
+            <Typography className='status' color='primary'>
+              Player
+            </Typography>
           </div>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant='permanent'
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: openAppbar,
-          [classes.drawerClose]: !openAppbar,
-        })}
-        classes={{
-          paper: clsx({
-            [classes.drawerOpen]: openAppbar,
-            [classes.drawerClose]: !openAppbar,
-          }),
-        }}
-      >
-        <div className={classes.toolbar}>
-          <img src={logoSymbole} alt='logo-hitmyteam' className='logo-hmt' />
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
         </div>
         <Divider />
-        <List>
+        <Typography className='first-title title-links' variant='h6'>
+          GENERAL
+        </Typography>
+        <List className='links-buttons'>
           {mainMenuItems.map((item) => (
             <ListItem
               button
@@ -205,16 +163,102 @@ export default function Layout({ children }) {
             </ListItem>
           ))}
         </List>
-        <Divider />
-        <List>
+        <Typography className='title-links' variant='h6'>
+          COMPTE
+        </Typography>
+        <List className='links-buttons'>
           {secondMenuItems.map((item) => (
-            <ListItem button key={item.text}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => history.push(item.path)}
+              className={location.pathname == item.path ? classes.active : null}
+            >
+              <ListItemIcon className={location.pathname == item.path ? classes.activeIcon : null}>
+                {item.icon}
+              </ListItemIcon>
               <ListItemText primary={item.text} />
             </ListItem>
           ))}
         </List>
-      </Drawer>
+        <Typography className='title-links' variant='h6'>
+          HITMYTEAM
+        </Typography>
+        <List className='links-buttons'>
+          {thirdMenuItems.map((item) => (
+            <ListItem
+              button
+              key={item.text}
+              onClick={() => history.push(item.path)}
+              className={location.pathname == item.path ? classes.active : null}
+            >
+              <ListItemIcon className={location.pathname == item.path ? classes.activeIcon : null}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+        <div className='layout-footer'>
+          <Typography variant='body1'>© 2021 HitMyTeam</Typography>
+        </div>
+      </div>
+    </Drawer>
+  );
+
+  const container = window !== undefined ? () => window().document.body : undefined;
+
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <AppBar position='fixed' className={classes.appBar}>
+        <Toolbar>
+          <IconButton
+            color='inherit'
+            aria-label='open drawer'
+            edge='start'
+            onClick={handleDrawerToggle}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+          <div className='nav-text'>
+            <img src={logoSymbole} alt='hitmyteam' className='logo-typo' />
+            <Avatar className={classes.avatar}></Avatar>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <nav className={classes.drawer} aria-label='mailbox folders'>
+        <Hidden mdUp implementation='css'>
+          <Drawer
+            container={container}
+            variant='temporary'
+            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+        <Hidden smDown implementation='css'>
+          <Drawer
+            classes={{
+              paper: classes.drawerPaper,
+            }}
+            variant='permanent'
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Hidden>
+      </nav>
 
       <div className={classes.page}>
         <div className={classes.toolbar}></div>
