@@ -19,6 +19,8 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSnackbar } from 'notistack';
 import PasswordStrengthBar from 'react-password-strength-bar';
+import Cookies from 'universal-cookie';
+import { useHistory } from 'react-router-dom';
 
 library.add(faDiscord);
 library.add(faGoogle);
@@ -55,6 +57,8 @@ export default function Register() {
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const cookies = new Cookies();
+  const history = useHistory();
 
   const buttonClassname = clsx({
     [classes.buttonSuccess]: success,
@@ -110,13 +114,40 @@ export default function Register() {
       });
 
       if (registerResponse.status === 201) {
-        enqueueSnackbar(`Inscription réussie !`, {
-          variant: 'success',
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'right',
+        const loginResponse = await fetch('/security/api/v1/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            accept: 'application/json',
           },
+          body: JSON.stringify({ username: email, password: password }),
+          credentials: 'include',
         });
+
+        if (loginResponse.status === 200) {
+          const tokenData = await loginResponse.json();
+
+          cookies.set('HitMyTeam', tokenData.token, { maxAge: 86400, secure: true });
+
+          enqueueSnackbar(`Inscription réussie !`, {
+            variant: 'success',
+            anchorOrigin: {
+              vertical: 'bottom',
+              horizontal: 'right',
+            },
+          });
+
+          history.push('/profil');
+
+          setLoading(false);
+        } else if (loginResponse.status === 500) {
+          setCredentialsErrorText(
+            'Une erreur avec le serveur est survenue, réessayez dans quelques instants'
+          );
+          setEmailError(true);
+          setPasswordError(true);
+          setLoading(false);
+        }
 
         setLoading(false);
       }
@@ -174,108 +205,134 @@ export default function Register() {
         <title>Inscription | HitMyTeam</title>
       </Helmet>
       <Grid container>
-        <Grid item className='right-register' xs={12} sm={7} lg={6}>
-          <Typography variant='h3' component='h1' color='primary'>
-            S'inscrire à HitMyTeam
-          </Typography>
-          <Typography variant='h5' component='h2'>
-            Veuillez vous inscrire afin d’accéder à la plateforme
-          </Typography>
-          <div className='buttons'>
-            <Button
-              variant='contained'
-              color='default'
-              size='large'
-              startIcon={<FontAwesomeIcon icon={['fab', 'google']} />}
-              className='twitter-button'
-            >
-              S'inscrire avec Google
-            </Button>
-            <Button
-              variant='contained'
-              color='default'
-              size='large'
-              startIcon={<FontAwesomeIcon icon={['fab', 'discord']} />}
-            >
-              S'inscrire avec Discord
-            </Button>
-          </div>
-          <div className='middle-log'>
-            <div className='bar'></div>
-            <Typography variant='h6' component='h3' align='center' className='or'>
-              Ou
+        {!cookies.get('HitMyTeam') ? (
+          <Grid item className='right-register' xs={12} sm={7} lg={6}>
+            <Typography variant='h3' component='h1' color='primary'>
+              S'inscrire à HitMyTeam
             </Typography>
-            <div className='bar'></div>
-          </div>
-          <form noValidate autoComplete='off'>
-            <Typography className='form-error' variant='body2' component='p' color='error'>
-              {credentialsErrorText}
+            <Typography variant='h5' component='h2'>
+              Veuillez vous inscrire afin d’accéder à la plateforme
             </Typography>
-            <div className='form-group'>
-              <TextField
-                onChange={(e) => setUsername(e.target.value)}
-                id='username'
-                label='Nom d’utilisateur'
-                variant='outlined'
-                className='username'
-                error={usernameError}
-                required
-              />
-              <Typography variant='body2' component='p' color='error'>
-                {usernameErrorText}
-              </Typography>
+            <div className='buttons'>
+              <Button
+                variant='contained'
+                color='default'
+                size='large'
+                startIcon={<FontAwesomeIcon icon={['fab', 'google']} />}
+                className='twitter-button'
+              >
+                S'inscrire avec Google
+              </Button>
+              <Button
+                variant='contained'
+                color='default'
+                size='large'
+                startIcon={<FontAwesomeIcon icon={['fab', 'discord']} />}
+              >
+                S'inscrire avec Discord
+              </Button>
             </div>
-            <div className='form-group'>
-              <TextField
-                onChange={(e) => setEmail(e.target.value)}
-                id='email'
-                label='Email'
-                type='email'
-                variant='outlined'
-                error={emailError}
-                required
-              />
-              <Typography variant='body2' component='p' color='error'>
-                {emailErrorText}
+            <div className='middle-log'>
+              <div className='bar'></div>
+              <Typography variant='h6' component='h3' align='center' className='or'>
+                Ou
               </Typography>
+              <div className='bar'></div>
             </div>
-            <div className='form-group'>
-              <TextField
-                onChange={(e) => setPassword(e.target.value)}
-                id='password'
-                label='Mot de passe'
-                variant='outlined'
-                type='password'
-                className='password'
-                error={passwordError}
-                required
-              />
-              <Typography className='password-error' variant='body2' component='p' color='error'>
-                {passwordErrorText}
+            <form noValidate autoComplete='off'>
+              <Typography className='form-error' variant='body2' component='p' color='error'>
+                {credentialsErrorText}
               </Typography>
-              <PasswordStrengthBar
-                scoreWords={frenchScoreWords}
-                barColors={barColors}
-                minLength={6}
-                shortScoreWord='Trop court'
-                password={password}
-              />
+              <div className='form-group'>
+                <TextField
+                  onChange={(e) => setUsername(e.target.value)}
+                  id='username'
+                  label='Nom d’utilisateur'
+                  variant='outlined'
+                  className='username'
+                  error={usernameError}
+                  required
+                />
+                <Typography variant='body2' component='p' color='error'>
+                  {usernameErrorText}
+                </Typography>
+              </div>
+              <div className='form-group'>
+                <TextField
+                  onChange={(e) => setEmail(e.target.value)}
+                  id='email'
+                  label='Email'
+                  type='email'
+                  variant='outlined'
+                  error={emailError}
+                  required
+                />
+                <Typography variant='body2' component='p' color='error'>
+                  {emailErrorText}
+                </Typography>
+              </div>
+              <div className='form-group'>
+                <TextField
+                  onChange={(e) => setPassword(e.target.value)}
+                  id='password'
+                  label='Mot de passe'
+                  variant='outlined'
+                  type='password'
+                  className='password'
+                  error={passwordError}
+                  required
+                />
+                <Typography className='password-error' variant='body2' component='p' color='error'>
+                  {passwordErrorText}
+                </Typography>
+                <PasswordStrengthBar
+                  scoreWords={frenchScoreWords}
+                  barColors={barColors}
+                  minLength={6}
+                  shortScoreWord='Trop court'
+                  password={password}
+                />
+              </div>
+              <Button
+                className={buttonClassname}
+                disabled={loading}
+                onClick={handleSubmit}
+                variant='contained'
+                color='primary'
+              >
+                S'inscrire
+                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+              </Button>
+            </form>
+            <Link className='already-registered' to='/connexion'>
+              Déjà un compte ? Connectez-vous
+            </Link>
+          </Grid>
+        ) : (
+          <Grid item className='right-register' xs={12} sm={7} lg={6}>
+            <Typography variant='h3' component='h1' color='primary'>
+              Bonjour
+            </Typography>
+            <Typography variant='h5' component='h2'>
+              Vous êtes déjà inscrit à HitMyTeam
+            </Typography>
+            <div className='buttons'>
+              <Button
+                variant='contained'
+                color='primary'
+                size='large'
+                className='return-hmt'
+                component={Link}
+                to='/profil'
+              >
+                Retourner sur HitMyTeam
+              </Button>
+              <Button variant='contained' color='default' size='large' className='logout'>
+                Se déconnecter de HitMyTeam
+              </Button>
             </div>
-            <Button
-              className={buttonClassname}
-              disabled={loading}
-              onClick={handleSubmit}
-              variant='contained'
-              color='primary'
-            >
-              S'inscrire
-              {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-            </Button>
-          </form>
-          <Link className='already-registered' to='/connexion'>
-            Déjà un compte ? Connectez-vous
-          </Link>
-        </Grid>
+          </Grid>
+        )}
         <Grid item className='left-register' xs={12} sm={5} lg={6}>
           <img src={imageCover} alt='img-esport' />
         </Grid>
