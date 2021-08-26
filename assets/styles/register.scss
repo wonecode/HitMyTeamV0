@@ -9,8 +9,8 @@
     width: 100%;
   }
 
-  button {
-    padding: 14px 22px;
+  .large-buttons {
+    padding: 10px 22px;
   }
 
   .left-register {
@@ -50,8 +50,7 @@
       margin-bottom: 16px !important;
     }
 
-    button,
-    a {
+    .already-registered {
       padding: 14px 22px;
     }
 
