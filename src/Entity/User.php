@@ -108,7 +108,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     #[Groups(['post:user:item'])]
     #[
         Length(min: 12),
-        Regex(pattern: '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])$/', message: "Le mot de passe doit contenir au minimum un chiffre, une majuscule, une minuscule et un caractère spécial.")
+        //Regex(pattern: '/^(?=.*[!@#$%^&*-])(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])$/', message: "Le mot de passe doit contenir au minimum un chiffre, une majuscule, une minuscule et un caractère spécial.")
     ]
     private $password;
 
