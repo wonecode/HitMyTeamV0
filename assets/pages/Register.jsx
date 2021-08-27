@@ -21,6 +21,12 @@ import { useSnackbar } from 'notistack';
 import PasswordStrengthBar from 'react-password-strength-bar';
 import Cookies from 'universal-cookie';
 import { useHistory } from 'react-router-dom';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import FormControl from '@material-ui/core/FormControl';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import { OutlinedInput } from '@material-ui/core';
 
 library.add(faDiscord);
 library.add(faGoogle);
@@ -66,6 +72,33 @@ export default function Register() {
 
   const frenchScoreWords = ['Faible', 'Faible', 'Correct', 'Bon', 'Excellent'];
   const barColors = ['#c0c0c0', '#f44336', '#f1c40f', '#3498db', '#43a047'];
+
+  const [values, setValues] = React.useState({
+    password: '',
+    showPassword: false,
+  });
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDisconnect = () => {
+    cookies.remove('HitMyTeam');
+
+    enqueueSnackbar(`Vous avez été déconnecté`, {
+      variant: 'error',
+      anchorOrigin: {
+        vertical: 'bottom',
+        horizontal: 'right',
+      },
+    });
+
+    history.push('/');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -219,7 +252,7 @@ export default function Register() {
                 color='default'
                 size='large'
                 startIcon={<FontAwesomeIcon icon={['fab', 'google']} />}
-                className='twitter-button'
+                className='twitter-button large-buttons'
               >
                 S'inscrire avec Google
               </Button>
@@ -227,6 +260,7 @@ export default function Register() {
                 variant='contained'
                 color='default'
                 size='large'
+                className='large-buttons'
                 startIcon={<FontAwesomeIcon icon={['fab', 'discord']} />}
               >
                 S'inscrire avec Discord
@@ -272,16 +306,27 @@ export default function Register() {
                 </Typography>
               </div>
               <div className='form-group'>
-                <TextField
-                  onChange={(e) => setPassword(e.target.value)}
-                  id='password'
-                  label='Mot de passe'
-                  variant='outlined'
-                  type='password'
-                  className='password'
-                  error={passwordError}
-                  required
-                />
+                <FormControl error={passwordError} required variant='outlined'>
+                  <InputLabel htmlFor='outlined-adornment-password'>Mot de passe</InputLabel>
+                  <OutlinedInput
+                    id='outlined-adornment-password'
+                    type={values.showPassword ? 'text' : 'password'}
+                    onChange={(e) => setPassword(e.target.value)}
+                    endAdornment={
+                      <InputAdornment position='end'>
+                        <IconButton
+                          aria-label='toggle password visibility'
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge='end'
+                        >
+                          {values.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    labelWidth={110}
+                  />
+                </FormControl>
                 <Typography className='password-error' variant='body2' component='p' color='error'>
                   {passwordErrorText}
                 </Typography>
@@ -294,7 +339,7 @@ export default function Register() {
                 />
               </div>
               <Button
-                className={buttonClassname}
+                className={`${buttonClassname} large-buttons`}
                 disabled={loading}
                 onClick={handleSubmit}
                 variant='contained'
@@ -327,7 +372,13 @@ export default function Register() {
               >
                 Retourner sur HitMyTeam
               </Button>
-              <Button variant='contained' color='default' size='large' className='logout'>
+              <Button
+                onClick={() => handleDisconnect()}
+                variant='contained'
+                color='default'
+                size='large'
+                className='logout'
+              >
                 Se déconnecter de HitMyTeam
               </Button>
             </div>

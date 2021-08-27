@@ -8,20 +8,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDiscord } from '@fortawesome/free-brands-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import IconButton from '@material-ui/core/IconButton';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
 import '../styles/login.scss';
 import { Helmet } from 'react-helmet';
 import imageCover from '../images/page-assets/esport-1.jpg';
 import { Link } from 'react-router-dom';
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 import { useHistory } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { green } from '@material-ui/core/colors';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
+import { FormControl, InputAdornment, InputLabel, OutlinedInput } from '@material-ui/core';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 library.add(faDiscord);
 library.add(faGoogle);
@@ -61,6 +62,33 @@ export default function Login() {
   const buttonClassname = clsx({
     [classes.buttonSuccess]: success,
   });
+
+  const [values, setValues] = React.useState({
+    password: '',
+    showPassword: false,
+  });
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleDisconnect = () => {
+    cookies.remove('HitMyTeam');
+
+    enqueueSnackbar(`Vous avez été déconnecté`, {
+      variant: 'error',
+      anchorOrigin: {
+        vertical: 'bottom',
+        horizontal: 'right',
+      },
+    });
+
+    history.push('/');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -150,7 +178,7 @@ export default function Login() {
                 color='default'
                 size='large'
                 startIcon={<FontAwesomeIcon icon={['fab', 'google']} />}
-                className='twitter-button'
+                className='twitter-button large-buttons'
               >
                 Se connecter avec Google
               </Button>
@@ -159,6 +187,7 @@ export default function Login() {
                 color='default'
                 size='large'
                 startIcon={<FontAwesomeIcon icon={['fab', 'discord']} />}
+                className='large-buttons'
               >
                 Se connecter avec Discord
               </Button>
@@ -188,16 +217,28 @@ export default function Login() {
                 </Typography>
               </div>
               <div>
-                <TextField
-                  id='password'
-                  label='Mot de passe'
-                  onChange={(e) => setPassword(e.target.value)}
-                  variant='outlined'
-                  type='password'
-                  error={passwordError}
-                  required
-                />
-                <Typography variant='body2' component='p' color='error'>
+                <FormControl error={passwordError} required variant='outlined'>
+                  <InputLabel htmlFor='outlined-adornment-password'>Mot de passe</InputLabel>
+                  <OutlinedInput
+                    id='outlined-adornment-password'
+                    type={values.showPassword ? 'text' : 'password'}
+                    onChange={(e) => setPassword(e.target.value)}
+                    endAdornment={
+                      <InputAdornment position='end'>
+                        <IconButton
+                          aria-label='toggle password visibility'
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge='end'
+                        >
+                          {values.showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    labelWidth={110}
+                  />
+                </FormControl>
+                <Typography className='password-error' variant='body2' component='p' color='error'>
                   {passwordErrorText}
                 </Typography>
               </div>
@@ -205,7 +246,7 @@ export default function Login() {
                 <Link className='pass-forgot'>Mot de passe oublié ?</Link>
               </div>
               <Button
-                className={buttonClassname}
+                className={`${buttonClassname} large-buttons`}
                 disabled={loading}
                 onClick={handleSubmit}
                 variant='contained'
@@ -238,7 +279,13 @@ export default function Login() {
               >
                 Retourner sur HitMyTeam
               </Button>
-              <Button variant='contained' color='default' size='large' className='logout'>
+              <Button
+                onClick={() => handleDisconnect()}
+                variant='contained'
+                color='default'
+                size='large'
+                className='logout'
+              >
                 Se déconnecter de HitMyTeam
               </Button>
             </div>

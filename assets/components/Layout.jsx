@@ -23,6 +23,8 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import PageviewIcon from '@material-ui/icons/Pageview';
 import { Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import Cookies from 'universal-cookie';
+import { useSnackbar } from 'notistack';
 
 const drawerWidth = 270;
 
@@ -77,10 +79,26 @@ export default function Layout({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { window } = children;
   const theme = useTheme();
+  const cookies = new Cookies();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const handleDisconnect = () => {
+    cookies.remove('HitMyTeam');
+
+    enqueueSnackbar(`Vous avez été déconnecté`, {
+      variant: 'error',
+      anchorOrigin: {
+        vertical: 'bottom',
+        horizontal: 'right',
+      },
+    });
+
+    history.push('/connexion');
+  }
 
   const mainMenuItems = [
     {
@@ -104,11 +122,6 @@ export default function Layout({ children }) {
     {
       text: 'Paramètres',
       icon: <SettingsIcon />,
-    },
-    {
-      text: 'Déconnexion',
-      icon: <ExitToAppIcon color='error' />,
-      path: '/deconnexion',
     },
   ];
 
@@ -180,6 +193,12 @@ export default function Layout({ children }) {
               <ListItemText primary={item.text} />
             </ListItem>
           ))}
+          <ListItem button onClick={() => handleDisconnect()}>
+            <ListItemIcon>
+              <ExitToAppIcon color='error' />
+            </ListItemIcon>
+            <ListItemText primary='Déconnexion' />
+          </ListItem>
         </List>
         <Typography className='title-links' variant='h6'>
           HITMYTEAM
