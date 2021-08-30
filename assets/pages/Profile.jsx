@@ -3,7 +3,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import '../styles/profile.scss';
 import TextField from '@material-ui/core/TextField';
@@ -20,11 +20,13 @@ import StepLabel from '@material-ui/core/StepLabel';
 import { Skeleton } from '@material-ui/lab';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 const RIOT_TOKEN = process.env.RIOT_TOKEN;
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom';
+const { romanToArab } = require('roman-numbers');
+import InfoIcon from '@material-ui/icons/Info';
 
 const riotHeader = {
   'User-Agent':
@@ -281,13 +283,7 @@ export default function Profile() {
         setPlayerThirdChamp(getChampName(getSortedKeys(championsOcc)[2]));
 
         setPlayerTier(firstCaps(playerStats.tier));
-
-        if (playerStats.rank === 'IV') {
-          setPlayerRank(4);
-        } else {
-          setPlayerRank(playerStats.rank.length);
-        }
-
+        setPlayerRank(romanToArab(playerStats.rank));
         setPlayerLeaguepoints(playerStats.leaguePoints);
         setPlayerHotstreak(playerStats.hotStreak);
         setPlayerWins(playerStats.wins);
@@ -485,7 +481,7 @@ export default function Profile() {
                     {playerMainRole !== '' ? (
                       <Typography variant='h6'>{playerMainRole}</Typography>
                     ) : (
-                      <Skeleton width={100} height={35} />
+                      <Skeleton width={95} height={35} />
                     )}
                   </div>
                 </Paper>
