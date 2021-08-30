@@ -281,7 +281,13 @@ export default function Profile() {
         setPlayerThirdChamp(getChampName(getSortedKeys(championsOcc)[2]));
 
         setPlayerTier(firstCaps(playerStats.tier));
-        setPlayerRank(playerStats.rank.length);
+
+        if (playerStats.rank === 'IV') {
+          setPlayerRank(4);
+        } else {
+          setPlayerRank(playerStats.rank.length);
+        }
+
         setPlayerLeaguepoints(playerStats.leaguePoints);
         setPlayerHotstreak(playerStats.hotStreak);
         setPlayerWins(playerStats.wins);
