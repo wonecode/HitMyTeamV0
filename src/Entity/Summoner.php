@@ -5,15 +5,65 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SummonerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SummonerRepository::class)
  */
 #[ApiResource(
-    openapiContext: [
-        'security' => [['bearerAuth' => []]]
+    collectionOperations: [
+        'get' =>[
+            'normalization_context' => [
+                'groups' => ['read:Summoner:collection']
+            ]
+        ],
+        'post' => [
+            'denormalization_context' => [
+                'groups' => ['post:Summoner:item']
+            ],
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
+        ]
     ],
-    security: 'is_granted("ROLE_USER")'
+    itemOperations: [
+        'patch' => [
+            "security" => "is_granted('ROLE_USER')",
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
+            'denormalization_context' => [
+                'groups' => ['patch:Summoner:item']
+            ]
+        ],
+        'put' => [
+            "security" => "is_granted('ROLE_USER')",
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
+            'denormalization_context' => [
+                'groups' => ['put:Summoner:item']
+            ]
+        ],
+        'delete' => [
+            "security" => "is_granted('ROLE_ADMIN')",
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
+            'normalization_context' => [
+                'groups' => ['delete:Summoner:admin']
+            ]
+        ],
+        'get' => [
+            "security" => "is_granted('ROLE_USER')",
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]]
+            ],
+            'normalization_context' => [
+                'groups' => ['read:Summoner:item', 'read:Summoner:admin']
+            ]
+        ]
+    ]
 )]
 class Summoner
 {
@@ -22,94 +72,178 @@ class Summoner
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups([
+        'delete:Summoner:admin',
+        'read:Summoner:admnin,'
+    ])]
     private $id;
-
-    /**
-     * @ORM\OneToOne(targetEntity=LeagueUser::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $leagueUser;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $name;
 
     /**
      * @ORM\Column(type="integer")
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $icon;
 
     /**
      * @ORM\Column(type="boolean")
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $isAvailable;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $tier;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $rank;
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
+    private $ranking;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $leaguepoints;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $wins;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $losses;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $isHotstreak;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $mainRole;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $mainChampion;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $secondChampion;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    #[Groups([
+        'read:Summoner:collection',
+        'post:Summoner:item',
+        'patch:Summoner:item',
+        'put:Summoner:item',
+        'delete:Summoner:admin'
+    ])]
     private $thirdChampion;
+
+    /**
+     * @ORM\OneToOne(targetEntity=LeagueUser::class, inversedBy="summoner", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    #[Groups(['post:Summoner:item'])]
+    private $leagueUser;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getLeagueUser(): ?LeagueUser
-    {
-        return $this->leagueUser;
-    }
-
-    public function setLeagueUser(LeagueUser $leagueUser): self
-    {
-        $this->leagueUser = $leagueUser;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -160,14 +294,14 @@ class Summoner
         return $this;
     }
 
-    public function getRank(): ?int
+    public function getRanking(): ?int
     {
-        return $this->rank;
+        return $this->ranking;
     }
 
-    public function setRank(?int $rank): self
+    public function setRanking(?int $ranking): self
     {
-        $this->rank = $rank;
+        $this->ranking = $ranking;
 
         return $this;
     }
@@ -264,6 +398,18 @@ class Summoner
     public function setThirdChampion(?string $thirdChampion): self
     {
         $this->thirdChampion = $thirdChampion;
+
+        return $this;
+    }
+
+    public function getLeagueUser(): ?LeagueUser
+    {
+        return $this->leagueUser;
+    }
+
+    public function setLeagueUser(LeagueUser $leagueUser): self
+    {
+        $this->leagueUser = $leagueUser;
 
         return $this;
     }

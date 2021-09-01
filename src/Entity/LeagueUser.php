@@ -28,6 +28,11 @@ class LeagueUser
     #[Groups(['read:item:league'])]
     private $user;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Summoner::class, mappedBy="leagueUser", cascade={"persist", "remove"})
+     */
+    private $summoner;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -41,6 +46,23 @@ class LeagueUser
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getSummoner(): ?Summoner
+    {
+        return $this->summoner;
+    }
+
+    public function setSummoner(Summoner $summoner): self
+    {
+        // set the owning side of the relation if necessary
+        if ($summoner->getLeagueUser() !== $this) {
+            $summoner->setLeagueUser($this);
+        }
+
+        $this->summoner = $summoner;
 
         return $this;
     }
