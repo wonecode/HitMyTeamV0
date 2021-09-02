@@ -80,7 +80,7 @@ class LeagueUser
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="leagueUser", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=User::class, inversedBy="leagueUser")
      * @ORM\JoinColumn(nullable=false)
      */
     #[Groups([
