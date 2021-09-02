@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\MeController;
 use App\Repository\UserRepository;
@@ -86,20 +87,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:user:me','read:user:item'])]
+    #[Groups([
+            'read:user:me',
+            'read:user:item',
+            'read:LeagueUser:collection',
+            'read:LeagueUser:item',]
+    )]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    #[Groups(['read:user:collection', 'put:user:item', 'post:user:item', 'read:user:me'])]
+    #[Groups([
+            'read:user:collection',
+            'put:user:item',
+            'post:user:item',
+            'read:user:me',
+            'read:LeagueUser:collection',
+            'read:LeagueUser:item',
+        ]
+    )]
     #[Email]
     private $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    #[Groups(['read:user:item', 'read:user:me'])]
+    #[Groups([
+            'read:user:item',
+            'read:user:me'
+        ]
+    )]
     private $roles = [];
 
     /**
@@ -116,7 +134,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:user:collection', 'read:user:item', 'put:user:item', 'post:user:item',' read:user:me'])]
+    #[Groups([
+            'read:user:collection',
+            'read:user:item',
+            'put:user:item',
+            'post:user:item',
+            'read:user:me',
+            'read:LeagueUser:collection',
+            'read:LeagueUser:item',
+        ]
+    )]
     private $username;
 
     /**

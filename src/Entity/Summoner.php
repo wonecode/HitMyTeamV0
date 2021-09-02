@@ -249,7 +249,7 @@ class Summoner
     private $thirdChampion;
 
     /**
-     * @ORM\OneToOne(targetEntity=LeagueUser::class, inversedBy="summoner", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=LeagueUser::class, inversedBy="summoner")
      * @ORM\JoinColumn(nullable=false)
      */
     #[Groups(['post:Summoner:item', 'read:Summoner:item'])]

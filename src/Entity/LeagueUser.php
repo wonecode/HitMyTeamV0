@@ -98,11 +98,7 @@ class LeagueUser
      */
     #[Groups([
         'read:LeagueUser:collection',
-        'post:LeagueUser:item',
         'read:LeagueUser:item',
-        'put:LeagueUser:item',
-        'delete:LeagueUser:admin',
-        'patch:LeagueUser:item'
     ])]
     private $summoner;
 
