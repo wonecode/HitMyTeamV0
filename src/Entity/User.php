@@ -37,20 +37,6 @@ use Symfony\Component\Validator\Constraints\Regex;
         ]
     ],
     itemOperations: [
-        'me' => [
-            "security" => "is_granted('ROLE_USER')",
-            'pagination_enabled' => false,
-            'path' => '/me',
-            'method' => 'get',
-            'controller' => MeController::class,
-            'read' => false,
-            'openapi_context' => [
-                'security' => [['bearerAuth' => []]],
-            ],
-            'normalization_context' => [
-                'groups' => ['read:user:me']
-            ]
-        ],
         'put' => [
             "security" => "is_granted('ROLE_USER')",
             'openapi_context' => [
@@ -72,9 +58,23 @@ use Symfony\Component\Validator\Constraints\Regex;
                 'security' => [['bearerAuth' => []]]
             ],
             'normalization_context' => [
-                'groups' => ['read:user:collection', 'read:user:item', 'read:league:item']
+                'groups' => ['read:user:collection', 'read:user:item', 'read:LeagueUser:item']
             ]
-        ]
+        ],
+        'me' => [
+            "security" => "is_granted('ROLE_USER')",
+            'pagination_enabled' => false,
+            'path' => '/me',
+            'method' => 'get',
+            'controller' => MeController::class,
+            'read' => false,
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]],
+            ],
+            'normalization_context' => [
+                'groups' => ['read:user:me']
+            ]
+        ],
     ]
 )]
 #[UniqueEntity('email')]
@@ -86,7 +86,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:user:me'])]
+    #[Groups(['read:user:me','read:user:item'])]
     private $id;
 
     /**

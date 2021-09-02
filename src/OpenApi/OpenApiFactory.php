@@ -58,7 +58,7 @@ class OpenApiFactory implements OpenApiFactoryInterface
                 ],
                 'password' => [
                     'type' => 'string',
-                    'example' => 'apassword',
+                    'example' => 'user',
                 ],
             ],
         ]);

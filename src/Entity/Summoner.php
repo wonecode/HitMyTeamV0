@@ -74,7 +74,8 @@ class Summoner
      */
     #[Groups([
         'delete:Summoner:admin',
-        'read:Summoner:admnin,'
+        'read:Summoner:admin,',
+        'read:Summoner:item'
     ])]
     private $id;
 
@@ -83,6 +84,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -95,6 +97,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -107,18 +110,20 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
         'delete:Summoner:admin'
     ])]
-    private $isAvailable;
+    private $isAvailable = false;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -131,6 +136,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -143,6 +149,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -155,6 +162,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -167,6 +175,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -179,6 +188,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -191,6 +201,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -203,6 +214,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -215,6 +227,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -227,6 +240,7 @@ class Summoner
      */
     #[Groups([
         'read:Summoner:collection',
+        'read:Summoner:item',
         'post:Summoner:item',
         'patch:Summoner:item',
         'put:Summoner:item',
@@ -238,7 +252,7 @@ class Summoner
      * @ORM\OneToOne(targetEntity=LeagueUser::class, inversedBy="summoner", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['post:Summoner:item'])]
+    #[Groups(['post:Summoner:item', 'read:Summoner:item'])]
     private $leagueUser;
 
     public function getId(): ?int
