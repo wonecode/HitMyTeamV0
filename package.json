@@ -5,7 +5,7 @@
     "@symfony/webpack-encore": "^1.0.0",
     "core-js": "^3.0.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "file-loader": "^6.0.0",
+    "file-loader": "^6.2.0",
     "regenerator-runtime": "^0.13.2",
     "sass": "^1.35.2",
     "sass-loader": "^10.0.0",
@@ -40,6 +40,7 @@
     "react-password-strength-bar": "^0.3.5",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "roman-numbers": "^1.0.1",
     "universal-cookie": "^4.0.4",
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.0"
