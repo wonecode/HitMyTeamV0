@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Controller\MeController;
 use App\Repository\UserRepository;
@@ -37,20 +38,6 @@ use Symfony\Component\Validator\Constraints\Regex;
         ]
     ],
     itemOperations: [
-        'me' => [
-            "security" => "is_granted('ROLE_USER')",
-            'pagination_enabled' => false,
-            'path' => '/me',
-            'method' => 'get',
-            'controller' => MeController::class,
-            'read' => false,
-            'openapi_context' => [
-                'security' => [['bearerAuth' => []]],
-            ],
-            'normalization_context' => [
-                'groups' => ['read:user:me']
-            ]
-        ],
         'put' => [
             "security" => "is_granted('ROLE_USER')",
             'openapi_context' => [
@@ -72,9 +59,23 @@ use Symfony\Component\Validator\Constraints\Regex;
                 'security' => [['bearerAuth' => []]]
             ],
             'normalization_context' => [
-                'groups' => ['read:user:collection', 'read:user:item', 'read:league:item']
+                'groups' => ['read:user:collection', 'read:user:item', 'read:LeagueUser:item']
             ]
-        ]
+        ],
+        'me' => [
+            "security" => "is_granted('ROLE_USER')",
+            'pagination_enabled' => false,
+            'path' => '/me',
+            'method' => 'get',
+            'controller' => MeController::class,
+            'read' => false,
+            'openapi_context' => [
+                'security' => [['bearerAuth' => []]],
+            ],
+            'normalization_context' => [
+                'groups' => ['read:user:me']
+            ]
+        ],
     ]
 )]
 #[UniqueEntity('email')]
@@ -86,20 +87,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    #[Groups(['read:user:me'])]
+    #[Groups([
+            'read:user:me',
+            'read:user:item',
+            'read:LeagueUser:collection',
+            'read:LeagueUser:item',]
+    )]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    #[Groups(['read:user:collection', 'put:user:item', 'post:user:item', 'read:user:me'])]
+    #[Groups([
+            'read:user:collection',
+            'put:user:item',
+            'post:user:item',
+            'read:user:me',
+            'read:LeagueUser:collection',
+            'read:LeagueUser:item',
+        ]
+    )]
     #[Email]
     private $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    #[Groups(['read:user:item', 'read:user:me'])]
+    #[Groups([
+            'read:user:item',
+            'read:user:me'
+        ]
+    )]
     private $roles = [];
 
     /**
@@ -116,7 +134,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['read:user:collection', 'read:user:item', 'put:user:item', 'post:user:item',' read:user:me'])]
+    #[Groups([
+            'read:user:collection',
+            'read:user:item',
+            'put:user:item',
+            'post:user:item',
+            'read:user:me',
+            'read:LeagueUser:collection',
+            'read:LeagueUser:item',
+        ]
+    )]
     private $username;
 
     /**
