@@ -18,7 +18,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import { Skeleton } from '@material-ui/lab';
-import RefreshIcon from '@material-ui/icons/Refresh';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useSnackbar } from 'notistack';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
@@ -26,11 +25,10 @@ const RIOT_TOKEN = process.env.RIOT_TOKEN;
 import Cookies from 'universal-cookie';
 import { Redirect } from 'react-router-dom';
 const { romanToArab } = require('roman-numbers');
-import InfoIcon from '@material-ui/icons/Info';
 
 const riotHeader = {
   'User-Agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
   'Accept-Language': 'fr-FR,fr;q=0.9,en-US;q=0.8,en;q=0.7',
   'Accept-Charset': 'application/x-www-form-urlencoded; charset=UTF-8',
   Origin: 'https://developer.riotgames.com',
@@ -136,7 +134,7 @@ export default function Profile() {
     setHideCodeVerification('code-invisible');
   };
 
-  const handleSubmit = async (e) => {
+  const getSummonerId = async (e) => {
     e.preventDefault();
     setSummonerNameError(false);
     setSummonerNameErrorText('');
@@ -240,7 +238,7 @@ export default function Profile() {
           Math.round((playerStats.wins / (playerStats.wins + playerStats.losses)) * 100) + '%'
         );
 
-        const version = '11.16.1';
+        const version = '11.18.1';
 
         const dragonResponse = await fetch(
           'http://ddragon.leagueoflegends.com/cdn/' + version + '/data/fr_FR/champion.json'
@@ -257,7 +255,6 @@ export default function Profile() {
         }
 
         // Get season history
-
         const accountId = summonerData.accountId;
 
         const matchesReponse = await fetch(
@@ -343,26 +340,55 @@ export default function Profile() {
         setIsVerified(false);
         setVerifySummonerErrorText('La vérification est incorrecte');
       }
-    } else {
+    } else if (summonerResponse.status === 429) {
       setIsVerified(false);
-      setVerifySummonerErrorText('La vérification est incorrecte');
+      setVerifySummonerErrorText(
+        'Une erreur avec le serveur est survenue, veuillez réessayer dans quelques instants'
+      );
     }
   };
 
-  const getLeagueData = async () => {
-    if (isVerified === true) {
-      const leagueResponse = await fetch(
-        'https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/' + summonerData.id,
-        {
-          headers: riotHeader,
-        }
-      );
-      const leagueData = await leagueResponse.json();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-      setLeagueData(leagueData[0]);
+    const postSummoner = await fetch('/api/v1/summoners', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        accept: 'application/ld+json',
+      },
+      body: JSON.stringify({
+        name: summonerName,
+        icon: profileIcon,
+        isAvailable: true,
+        tier: playerTier,
+        ranking: playerRank,
+        leaguepoints: playerLeaguepoints,
+        wins: playerWins,
+        losses: playerLosses,
+        isHotStreak: playerHotstreak,
+        mainRole: playerMainRole,
+        mainChampion: playerMainChamp,
+        secondChampion: playerSecondChamp,
+        thirdChampion: playerThirdChamp,
+        leagueUser: '/api/v1/league_users/1',
+      }),
+      credentials: 'include',
+    });
 
-      enqueueSnackbar('Votre profil a bien été actualisé !', {
+    if (postSummoner.status === 201) {
+      handleClose();
+
+      enqueueSnackbar('Votre profil a bien été enregistré !', {
         variant: 'success',
+        anchorOrigin: {
+          vertical: 'bottom',
+          horizontal: 'right',
+        },
+      });
+    } else {
+      enqueueSnackbar('Une erreur inconue est survenue', {
+        variant: 'error',
         anchorOrigin: {
           vertical: 'bottom',
           horizontal: 'right',
@@ -399,16 +425,7 @@ export default function Profile() {
                 Initialiser le profil
               </Button>
             ) : (
-              <Tooltip
-                title='Rafraîchir le profil'
-                aria-label='refresh-profile'
-                placement='top'
-                arrow
-              >
-                <Button variant='contained' color='primary' onClick={getLeagueData}>
-                  <RefreshIcon />
-                </Button>
-              </Tooltip>
+              ''
             )}
           </div>
           <Grid container className='content' spacing={3}>
@@ -553,7 +570,7 @@ export default function Profile() {
               )}
             </div>
             <DialogContent className='main-content-dialog'>
-              <form noValidate autoComplete='off' onSubmit={handleSubmit} id={hideFormSummoner}>
+              <form noValidate autoComplete='off' onSubmit={getSummonerId} id={hideFormSummoner}>
                 <div className='init-summoner'>
                   <TextField
                     onChange={(e) => setSummonerName(e.target.value)}
@@ -596,7 +613,7 @@ export default function Profile() {
               <Button onClick={handleReset} color='primary'>
                 Annuler
               </Button>
-              <Button onClick={handleClose} color='primary'>
+              <Button onClick={handleSubmit} color='primary'>
                 Enregistrer
               </Button>
             </DialogActions>

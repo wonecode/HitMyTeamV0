@@ -73,7 +73,7 @@ use Symfony\Component\Validator\Constraints\Regex;
                 'security' => [['bearerAuth' => []]],
             ],
             'normalization_context' => [
-                'groups' => ['read:user:me']
+                'groups' => ['read:user:me', 'read:LeagueUser:item']
             ]
         ],
     ]
@@ -167,7 +167,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     /**
      * @ORM\OneToOne(targetEntity=LeagueUser::class, mappedBy="user", cascade={"persist", "remove"})
      */
-    #[Groups(['read:user:item', 'put:user:item'])]
+    #[Groups(['read:user:item', 'put:user:item', 'read:LeagueUser:item'])]
     private $leagueUser;
 
     public function getId(): ?int

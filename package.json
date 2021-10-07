@@ -30,6 +30,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.60",
     "@material-ui/styles": "^4.11.4",
+    "@material-ui/system": "^4.12.1",
     "dotenv": "^10.0.0",
     "notistack": "^1.0.10",
     "prop-types": "^15.7.2",

@@ -93,7 +93,7 @@ class Summoner
     private $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string")
      */
     #[Groups([
         'read:Summoner:collection',
@@ -272,12 +272,12 @@ class Summoner
         return $this;
     }
 
-    public function getIcon(): ?int
+    public function getIcon(): ?string
     {
         return $this->icon;
     }
 
-    public function setIcon(int $icon): self
+    public function setIcon(string $icon): self
     {
         $this->icon = $icon;
 
